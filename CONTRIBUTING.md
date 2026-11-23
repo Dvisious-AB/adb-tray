@@ -30,6 +30,7 @@ before you spend time on it.
 | `packaging/debian/` | Builds the `.deb` |
 | `packaging/apt/` | Maintains the apt repository on `gh-pages`; see [packaging/apt/README.md](packaging/apt/README.md) |
 | `packaging/homebrew/` | The Homebrew formula, published in [Dvisious-AB/homebrew-tap](https://github.com/Dvisious-AB/homebrew-tap) |
+| `help/` | The manual on appninjas.se/hjalp/adb; see [help/README.md](help/README.md) |
 | `VERSION` | The release version, used by every build |
 
 Both apps have the same menu and the same behaviour. A change to one should be made in the other too.
@@ -77,6 +78,7 @@ python3 -m py_compile adb-tray.py branding/brand.py
 shellcheck install.sh uninstall.sh po/update.sh macos/build-app.sh packaging/debian/build-deb.sh packaging/apt/update-repo.sh
 branding/brand.py generate --check
 po/update.sh --check
+help/strings.py --check
 packaging/debian/build-deb.sh            # Linux: builds dist/adb-tray_<version>_all.deb
 swift test --package-path macos          # macOS
 macos/build-app.sh                       # macOS
@@ -103,7 +105,8 @@ Also test manually in Cinnamon with at least one real device:
   Python and `tr("Mirror screen")` in Swift, with named placeholders
   (`_("Connected to {host}").format(host=host)`, `format(tr("Connected to {host}"), ["host": host])`)
   and `ngettext`/`trn` for plurals. Keep
-  source strings ASCII-only. After changing strings, run `po/update.sh` and update the translations you can.
+  source strings ASCII-only. After changing strings, run `po/update.sh`, update the translations you can,
+  and run `help/strings.py` so the manual's button names follow.
 - Messages follow the Appninjas tone: calm and exact, no exclamation marks. An error says what happened,
   why, and what to do now, in that order.
 - The product name *Appninjas ADB* is never translated. Icons come from `branding/` only.

@@ -1,0 +1,34 @@
+{
+	"menu": {
+		"noDevices": "Inga enheter anslutna",
+		"connectWifi": "Anslut via Wi-Fi",
+		"newAddress": "Ny adress…",
+		"pair": "Para ihop (trådlös felsökning)…",
+		"refresh": "Uppdatera",
+		"restartServer": "Starta om adb-servern",
+		"help": "Hjälp",
+		"about": "Om {name}",
+		"quit": "Avsluta",
+		"copyInstall": "Kopiera installationskommandot"
+	},
+	"device": {
+		"mirror": "Spegla skärmen",
+		"stopMirroring": "Stoppa speglingen",
+		"lockPortrait": "Lås stående",
+		"lockLandscape": "Lås liggande",
+		"autoRotate": "Rotera automatiskt",
+		"screenshot": "Ta en skärmdump",
+		"shell": "Öppna adb shell",
+		"switchToWifi": "Växla till Wi-Fi",
+		"disconnect": "Koppla från",
+		"unauthorized": "godkänn på enheten",
+		"offline": "svarar inte"
+	},
+	"dialog": {
+		"address": "Adress (IP:port)",
+		"pairingAddress": "Parningsadress (IP:port)",
+		"pairingCode": "Parningskod",
+		"connectionAddress": "Anslutningsadress (valfri)",
+		"ok": "OK"
+	}
+}

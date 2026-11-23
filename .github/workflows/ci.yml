@@ -23,10 +23,10 @@ jobs:
         run: pip install ruff
 
       - name: Ruff
-        run: ruff check adb-tray.py branding/brand.py
+        run: ruff check adb-tray.py branding/brand.py help/strings.py
 
       - name: Compile
-        run: python -m py_compile adb-tray.py branding/brand.py
+        run: python -m py_compile adb-tray.py branding/brand.py help/strings.py
 
       - name: ShellCheck
         run: >
@@ -41,6 +41,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends gettext desktop-file-utils
           for po in po/*.po; do msgfmt --check --statistics -o /dev/null "$po"; done
           po/update.sh --check
+          help/strings.py --check
 
       - name: Desktop file template
         run: |

@@ -1,0 +1,34 @@
+{
+	"menu": {
+		"noDevices": "No devices connected",
+		"connectWifi": "Connect via Wi-Fi",
+		"newAddress": "New address...",
+		"pair": "Pair (wireless debugging)...",
+		"refresh": "Refresh",
+		"restartServer": "Restart adb server",
+		"help": "Help",
+		"about": "About {name}",
+		"quit": "Quit",
+		"copyInstall": "Copy the install command"
+	},
+	"device": {
+		"mirror": "Mirror screen",
+		"stopMirroring": "Stop mirroring",
+		"lockPortrait": "Lock portrait",
+		"lockLandscape": "Lock landscape",
+		"autoRotate": "Auto-rotate",
+		"screenshot": "Take screenshot",
+		"shell": "Open adb shell",
+		"switchToWifi": "Switch to Wi-Fi",
+		"disconnect": "Disconnect",
+		"unauthorized": "authorize on device",
+		"offline": "offline"
+	},
+	"dialog": {
+		"address": "Address (IP:port)",
+		"pairingAddress": "Pairing address (IP:port)",
+		"pairingCode": "Pairing code",
+		"connectionAddress": "Connection address (optional)",
+		"ok": "OK"
+	}
+}
