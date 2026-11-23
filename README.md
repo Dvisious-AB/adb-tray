@@ -6,7 +6,7 @@
 **Your Android devices in the menu bar or system tray.** Open the menu to see the connected devices, mirror a
 screen, rotate it, take a screenshot or connect over Wi-Fi without opening a terminal.
 
-Appninjas ADB runs on **macOS** (a menu bar app) and on **Linux Mint / Cinnamon** (a tray icon), on top of
+Appninjas ADB runs on **macOS** (a menu bar app), **Windows** and **Linux Mint / Cinnamon** (a tray icon), on top of
 [`adb`](https://developer.android.com/tools/adb) and [`scrcpy`](https://github.com/Genymobile/scrcpy). The
 command and the package are called `adb-tray`. Product page:
 [appninjas.se/appar/adb](https://appninjas.se/appar/adb). The manual, which **Help** in the menu opens:
@@ -64,6 +64,21 @@ brew services start adb-tray                  # start now and at every login
 `$(brew --prefix)/opt/adb-tray/Appninjas ADB.app`, and `adb-tray` in the terminal starts it too.
 
 Update with `brew upgrade adb-tray`, then `brew services restart adb-tray`.
+
+### Windows (winget or Chocolatey)
+
+```powershell
+winget install Dvisious.AppninjasADB      # also installs scrcpy, which contains adb
+choco install adb-tray                    # the same from Chocolatey
+```
+
+Start it with `adb-tray` or from the Start menu's search. The icon appears among the hidden icons in
+the notification area; drag it onto the taskbar to keep it visible. The program is a single
+`adb-tray.exe`, also attached to every [release](https://github.com/Dvisious-AB/adb-tray/releases).
+It is not code-signed, so SmartScreen may ask before the first start.
+
+The Windows version is written in Rust (`rust/`) and is meant to replace the Python and Swift versions
+on Linux and macOS as well.
 
 ### Linux Mint, Ubuntu and Debian (apt)
 

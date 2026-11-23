@@ -24,6 +24,7 @@ before you spend time on it.
 | Path | What it is |
 | --- | --- |
 | `adb-tray.py` | The Linux tray icon (Python, GTK 3, XApp) |
+| `rust/` | The Rust version, today the Windows app: `src/lib.rs` holds what can be tested, `src/main.rs` the tray icon and menu. Meant to replace `adb-tray.py` and `macos/` |
 | `macos/` | The macOS menu bar app, a Swift package. `AdbTrayCore` holds what can be tested without a menu bar; `AdbTray` is the app |
 | `po/` | Translations, shared by both apps |
 | `branding/` | Logo, icons and colours from the Appninjas brand; see [branding/README.md](branding/README.md) |
@@ -80,6 +81,7 @@ branding/brand.py generate --check
 po/update.sh --check
 help/strings.py --check
 packaging/debian/build-deb.sh            # Linux: builds dist/adb-tray_<version>_all.deb
+cargo test --lib --manifest-path rust/Cargo.toml   # every platform
 swift test --package-path macos          # macOS
 macos/build-app.sh                       # macOS
 ```

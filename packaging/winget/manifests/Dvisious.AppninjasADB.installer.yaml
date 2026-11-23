@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.10.0.schema.json
+PackageIdentifier: Dvisious.AppninjasADB
+PackageVersion: 1.1.0
+InstallerType: zip
+NestedInstallerType: portable
+NestedInstallerFiles:
+  - RelativeFilePath: adb-tray.exe
+    PortableCommandAlias: adb-tray
+Dependencies:
+  PackageDependencies:
+    - PackageIdentifier: Genymobile.scrcpy
+ReleaseDate: 2026-11-23
+Installers:
+  - Architecture: x64
+    InstallerUrl: https://github.com/Dvisious-AB/adb-tray/releases/download/v1.1.0/adb-tray-1.1.0-windows-x64.zip
+    InstallerSha256: 0000000000000000000000000000000000000000000000000000000000000000
+ManifestType: installer
+ManifestVersion: 1.10.0

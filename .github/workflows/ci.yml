@@ -83,6 +83,9 @@ jobs:
       - name: Unit tests
         run: swift test --package-path macos
 
+      - name: Rust tests
+        run: cargo test --locked --lib --manifest-path rust/Cargo.toml
+
       - name: Build the app
         run: macos/build-app.sh --output build
 
@@ -102,3 +105,29 @@ jobs:
           brew tap-new --no-git local/ci
           cp packaging/homebrew/adb-tray.rb "$(brew --repo local/ci)/Formula/"
           brew style local/ci/adb-tray
+
+  windows:
+    name: windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rust tests
+        run: cargo test --locked --lib --manifest-path rust/Cargo.toml
+
+      - name: Build
+        run: cargo build --locked --release --manifest-path rust/Cargo.toml
+
+      - name: Check the program
+        shell: bash
+        run: |
+          exe=rust/target/release/adb-tray.exe
+          test -s "$exe"
+          # A GUI program: --version prints to the console it was started from.
+          "$exe" --version | tee version.txt
+          grep -qx "adb-tray $(tr -d '[:space:]' < VERSION)" version.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: adb-tray-windows
+          path: rust/target/release/adb-tray.exe

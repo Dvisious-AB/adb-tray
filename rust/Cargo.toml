@@ -3,6 +3,7 @@ name = "adb-tray"
 description = "Appninjas ADB: adb devices and scrcpy screen mirroring from the menu bar or system tray"
 version = "0.0.0"  # The release version comes from ../VERSION; see build.rs.
 edition = "2024"
+rust-version = "1.89"  # File::try_lock
 license = "MIT"
 repository = "https://github.com/Dvisious-AB/adb-tray"
 publish = false
