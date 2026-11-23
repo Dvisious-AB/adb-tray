@@ -17,8 +17,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. Translators: the address of the help page in your language, or leave the English page.
-msgid "https://appninjas.se/en/appar/adb"
-msgstr "https://appninjas.se/appar/adb"
+msgid "https://appninjas.se/en/hjalp/adb"
+msgstr "https://appninjas.se/hjalp/adb"
 
 #, python-brace-format
 msgid "Connected to {host}"

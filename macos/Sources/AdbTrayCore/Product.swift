@@ -7,5 +7,5 @@ public enum Product {
     public static let command = "adb-tray"
     public static let repository = URL(string: "https://github.com/Dvisious-AB/adb-tray")!
     /// The English help page. Each translation points to the page in its own language (see po/*.po).
-    public static let helpPageEnglish = "https://appninjas.se/en/appar/adb"
+    public static let helpPageEnglish = "https://appninjas.se/en/hjalp/adb"
 }

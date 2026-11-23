@@ -8,8 +8,9 @@ screen, rotate it, take a screenshot or connect over Wi-Fi without opening a ter
 
 Appninjas ADB runs on **macOS** (a menu bar app) and on **Linux Mint / Cinnamon** (a tray icon), on top of
 [`adb`](https://developer.android.com/tools/adb) and [`scrcpy`](https://github.com/Genymobile/scrcpy). The
-command and the package are called `adb-tray`. Help in Swedish and English:
-[appninjas.se/appar/adb](https://appninjas.se/appar/adb).
+command and the package are called `adb-tray`. Product page:
+[appninjas.se/appar/adb](https://appninjas.se/appar/adb). The manual, which **Help** in the menu opens:
+[appninjas.se/hjalp/adb](https://appninjas.se/hjalp/adb).
 
 ```text
 [icon] ─┬─ SM-X210  (USB)        ─┬─ Mirror screen

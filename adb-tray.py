@@ -34,7 +34,7 @@ APP = "Appninjas ADB"
 VERSION = "@VERSION@"
 REPOSITORY = "https://github.com/Dvisious-AB/adb-tray"
 # Translators: the address of the help page in your language, or leave the English page.
-HELP_URL = _("https://appninjas.se/en/appar/adb")
+HELP_URL = _("https://appninjas.se/en/hjalp/adb")
 _HERE = Path(__file__).resolve().parent
 # Icon theme names, installed by install.sh and the Debian package. Run from a checkout, the files in
 # branding/ are used directly.
