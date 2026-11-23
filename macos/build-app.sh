@@ -23,8 +23,8 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-swift build --package-path "$ROOT/macos" -c release "${SWIFT_FLAGS[@]}"
-BIN_DIR="$(swift build --package-path "$ROOT/macos" -c release "${SWIFT_FLAGS[@]}" --show-bin-path)"
+swift build --package-path "$ROOT/macos" -c release ${SWIFT_FLAGS[@]+"${SWIFT_FLAGS[@]}"}
+BIN_DIR="$(swift build --package-path "$ROOT/macos" -c release ${SWIFT_FLAGS[@]+"${SWIFT_FLAGS[@]}"} --show-bin-path)"
 
 APP="$OUTPUT/Appninjas ADB.app"
 rm -rf "$APP"
