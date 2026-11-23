@@ -1,4 +1,4 @@
-# Contributing to adb-tray
+# Contributing to Appninjas ADB (adb-tray)
 
 Thanks for wanting to contribute! This document describes how changes are accepted.
 
@@ -19,7 +19,24 @@ Thanks for wanting to contribute! This document describes how changes are accept
 For larger changes or new features, please open an issue first so we can agree on the approach
 before you spend time on it.
 
+## Layout
+
+| Path | What it is |
+| --- | --- |
+| `adb-tray.py` | The Linux tray icon (Python, GTK 3, XApp) |
+| `macos/` | The macOS menu bar app, a Swift package. `AdbTrayCore` holds what can be tested without a menu bar; `AdbTray` is the app |
+| `po/` | Translations, shared by both apps |
+| `branding/` | Logo, icons and colours from the Appninjas brand; see [branding/README.md](branding/README.md) |
+| `packaging/debian/` | Builds the `.deb` |
+| `packaging/apt/` | Maintains the apt repository on `gh-pages`; see [packaging/apt/README.md](packaging/apt/README.md) |
+| `packaging/homebrew/` | The Homebrew formula, published in [Dvisious-AB/homebrew-tap](https://github.com/Dvisious-AB/homebrew-tap) |
+| `VERSION` | The release version, used by every build |
+
+Both apps have the same menu and the same behaviour. A change to one should be made in the other too.
+
 ## Development setup
+
+On Linux:
 
 ```bash
 sudo apt install adb scrcpy python3-gi gir1.2-gtk-3.0 gir1.2-xapp-1.0 libnotify-bin gettext shellcheck
@@ -29,25 +46,40 @@ git clone https://github.com/<your-account>/adb-tray.git
 cd adb-tray
 ```
 
-Run the program straight from source, without installing:
+On macOS, with Xcode 15 or later:
+
+```bash
+brew install scrcpy gettext shellcheck ruff
+brew install --cask android-platform-tools
+swift test --package-path macos
+macos/build-app.sh && open "macos/build/Appninjas ADB.app"
+```
+
+Run the Linux program straight from source, without installing:
 
 ```bash
 pkill -f 'adb-tray(\.py)?$'   # stop an installed instance, if any
 ./adb-tray.py
 ```
 
-Only one instance can run at a time (lock file `~/.config/adb-tray/tray.lock`). Translations are loaded from
-`~/.local/share/locale`, so run `./install.sh` once to see them when running from source.
+Only one instance can run at a time (lock file `~/.config/adb-tray/tray.lock`, on macOS
+`~/Library/Application Support/adb-tray/tray.lock`). Translations are loaded from `~/.local/share/locale`,
+so run `./install.sh` once to see them when running from source. The macOS app reads the `.po` files
+directly, from the app bundle or from `$ADB_TRAY_LOCALE_DIR`.
 
 ## Checks
 
 The same checks run in CI on every pull request:
 
 ```bash
-ruff check adb-tray.py
-python3 -m py_compile adb-tray.py
-shellcheck install.sh uninstall.sh po/update.sh
+ruff check adb-tray.py branding/brand.py
+python3 -m py_compile adb-tray.py branding/brand.py
+shellcheck install.sh uninstall.sh po/update.sh macos/build-app.sh packaging/debian/build-deb.sh packaging/apt/update-repo.sh
+branding/brand.py generate --check
 po/update.sh --check
+packaging/debian/build-deb.sh            # Linux: builds dist/adb-tray_<version>_all.deb
+swift test --package-path macos          # macOS
+macos/build-app.sh                       # macOS
 ```
 
 Also test manually in Cinnamon with at least one real device:
@@ -56,17 +88,25 @@ Also test manually in Cinnamon with at least one real device:
 - [ ] A USB device is listed, mirroring starts and stops
 - [ ] Wi-Fi: *Switch to Wi-Fi* and reconnecting via a saved address
 - [ ] `./install.sh` and `./uninstall.sh` work
+- [ ] On macOS: the icon appears in the menu bar, the menu and About open, and `brew install --HEAD`
+      from a local tap builds and starts the app
 
 ## Code style
 
-- Python 3, standard library + PyGObject. Do not add new dependencies without discussing it first.
+- Python 3, standard library + PyGObject. Swift with AppKit and the standard library only. Do not add new
+  dependencies without discussing it first.
 - GTK calls happen on the main thread only. Blocking work (`adb`, network) runs on a background thread via
   `run_bg`, and results are handed back with `GLib.idle_add`.
 - Call external programs with argument lists (`subprocess.run([...])`), never through a shell with
   concatenated strings.
-- User-visible strings are written in English and wrapped for translation: `_("Mirror screen")`, with
-  named placeholders (`_("Connected to {host}").format(host=host)`) and `ngettext` for plurals. Keep
+- User-visible strings are written in English and wrapped for translation: `_("Mirror screen")` in
+  Python and `tr("Mirror screen")` in Swift, with named placeholders
+  (`_("Connected to {host}").format(host=host)`, `format(tr("Connected to {host}"), ["host": host])`)
+  and `ngettext`/`trn` for plurals. Keep
   source strings ASCII-only. After changing strings, run `po/update.sh` and update the translations you can.
+- Messages follow the Appninjas tone: calm and exact, no exclamation marks. An error says what happened,
+  why, and what to do now, in that order.
+- The product name *Appninjas ADB* is never translated. Icons come from `branding/` only.
 - Code, comments, commit messages and documentation are in English.
 - Comment *why*, not *what*. Lint rules are defined in `ruff.toml`.
 
@@ -106,14 +146,21 @@ docs: clarify wireless debugging steps
 chore: bump CI actions
 ```
 
+## Releases
+
+A maintainer sets `VERSION`, merges it, and pushes a matching `v*` tag. The release workflow builds the
+Debian package, updates the apt repository and publishes the GitHub release. The Homebrew formula in the tap
+is then updated with the new `url` and `sha256`. Details: [packaging/apt/README.md](packaging/apt/README.md).
+
 ## Reporting bugs and requesting features
 
 Use the issue templates under **Issues → New issue**. Include:
 
-- distribution and Cinnamon version
+- distribution and Cinnamon version, or the macOS version
 - `adb version` and `scrcpy --version`
 - device model and Android version
-- relevant lines from `~/.config/adb-tray/scrcpy-*.log` or the output of `./adb-tray.py`
+- the version from **About Appninjas ADB** or `adb-tray --version`
+- relevant lines from the `scrcpy-*.log` file (see the README) or the output of `adb-tray`
 
 Do **not** report security issues as public issues – see [SECURITY.md](SECURITY.md).
 

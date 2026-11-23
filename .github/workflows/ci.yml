@@ -23,13 +23,18 @@ jobs:
         run: pip install ruff
 
       - name: Ruff
-        run: ruff check adb-tray.py
+        run: ruff check adb-tray.py branding/brand.py
 
       - name: Compile
-        run: python -m py_compile adb-tray.py
+        run: python -m py_compile adb-tray.py branding/brand.py
 
       - name: ShellCheck
-        run: shellcheck install.sh uninstall.sh po/update.sh
+        run: >
+          shellcheck install.sh uninstall.sh po/update.sh macos/build-app.sh
+          packaging/debian/build-deb.sh packaging/apt/update-repo.sh
+
+      - name: Brand assets
+        run: branding/brand.py generate --check
 
       - name: Translations
         run: |
@@ -42,3 +47,57 @@ jobs:
           sed 's|@EXEC@|/usr/local/bin/adb-tray|' adb-tray.desktop.in \
             | msgfmt --desktop --template=/dev/stdin -d po -o /tmp/adb-tray.desktop
           desktop-file-validate /tmp/adb-tray.desktop
+
+  deb:
+    name: deb
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: sudo apt-get install -y --no-install-recommends gettext desktop-file-utils
+
+      - name: Build the package
+        run: echo "DEB=$(packaging/debian/build-deb.sh --output dist)" >> "$GITHUB_ENV"
+
+      - name: Inspect the package
+        run: |
+          dpkg-deb --info "$DEB"
+          dpkg-deb --contents "$DEB"
+          mkdir pkg && dpkg-deb -x "$DEB" pkg
+          desktop-file-validate pkg/usr/share/applications/adb-tray.desktop
+          grep -q '^VERSION = "'"$(cat VERSION)"'"' pkg/usr/bin/adb-tray
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: adb-tray-deb
+          path: dist/*.deb
+
+  macos:
+    name: macos
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unit tests
+        run: swift test --package-path macos
+
+      - name: Build the app
+        run: macos/build-app.sh --output build
+
+      - name: Check the app
+        run: |
+          app="build/Appninjas ADB.app"
+          "$app/Contents/MacOS/adb-tray" --version | grep -qx "adb-tray $(cat VERSION)"
+          plutil -lint "$app/Contents/Info.plist"
+          test -s "$app/Contents/Resources/AppIcon.icns"
+          codesign --verify --strict "$app"
+
+      # brew style applies the formula rules only to a file inside a tap.
+      - name: Homebrew formula style
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+        run: |
+          brew tap-new --no-git local/ci
+          cp packaging/homebrew/adb-tray.rb "$(brew --repo local/ci)/Formula/"
+          brew style local/ci/adb-tray

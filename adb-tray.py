@@ -125,7 +125,8 @@ def connect_host(host):
         save_host(host)
         notify(_("Connected to {host}").format(host=host))
     else:
-        notify(_("Could not connect to {host}. Check that the device is on the same network and that wireless debugging is on.").format(host=host) + f"\n{out}")
+        notify(_("Could not connect to {host}. Check that the device is on the same network "
+                 "and that wireless debugging is on.").format(host=host) + f"\n{out}")
 
 
 class Tray:
@@ -273,7 +274,8 @@ class Tray:
         def watch():
             code = proc.wait()
             if code != 0 and time.monotonic() - started < 10:
-                notify(_("Mirroring stopped because scrcpy exited with error {code}. The details are in {log}.").format(code=code, log=log))
+                notify(_("Mirroring stopped because scrcpy exited with error {code}. "
+                         "The details are in {log}.").format(code=code, log=log))
             GLib.idle_add(self.poll)
 
         threading.Thread(target=watch, daemon=True).start()
@@ -308,7 +310,8 @@ class Tray:
     def open_shell(serial):
         term = shutil.which("x-terminal-emulator") or shutil.which("gnome-terminal")
         if not term:
-            notify(_("Could not open adb shell because no terminal program was found. Install one, for example gnome-terminal."))
+            notify(_("Could not open adb shell because no terminal program was found. "
+                     "Install one, for example gnome-terminal."))
             return
         subprocess.Popen([term, "-e", shlex.join(["adb", "-s", serial, "shell"])])
 
@@ -317,7 +320,8 @@ class Tray:
         _rc, out = adb("shell", "ip", "-f", "inet", "addr", "show", "wlan0", serial=serial)
         match = re.search(r"inet (\d+\.\d+\.\d+\.\d+)", out)
         if not match:
-            notify(_("Could not switch to Wi-Fi because the device has no Wi-Fi address. Connect it to a Wi-Fi network and try again."))
+            notify(_("Could not switch to Wi-Fi because the device has no Wi-Fi address. "
+                     "Connect it to a Wi-Fi network and try again."))
             return
         adb("tcpip", str(TCP_PORT), serial=serial)
         time.sleep(2)
@@ -397,7 +401,8 @@ class Tray:
         def pair(address, code, connect_to):
             _rc, out = adb("pair", address, code, timeout=20)
             if "Successfully paired" not in out:
-                notify(_("Pairing failed. Check the pairing address and code under Wireless debugging on the device, and try again.") + f"\n{out}")
+                notify(_("Pairing failed. Check the pairing address and code under Wireless debugging "
+                         "on the device, and try again.") + f"\n{out}")
                 return
             notify(_("Pairing succeeded"))
             if connect_to:
