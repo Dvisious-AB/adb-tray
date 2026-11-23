@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=ADB Devices
+Name=Appninjas ADB
 Comment=System tray icon for adb devices and scrcpy screen mirroring
 Exec=@EXEC@
-Icon=scrcpy
+Icon=appninjas-adb
 Terminal=false
 Categories=Utility;
 X-GNOME-Autostart-enabled=true

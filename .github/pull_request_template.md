@@ -11,10 +11,11 @@
 
 ## Tested
 
-- [ ] `ruff check adb-tray.py`, `python3 -m py_compile adb-tray.py` and `shellcheck install.sh uninstall.sh` pass
+- [ ] The checks in [CONTRIBUTING.md](../CONTRIBUTING.md#checks) pass
 - [ ] Manually tested in Cinnamon with a real device
+- [ ] Manually tested on macOS with a real device (if the change touches `macos/` or both apps)
 
-Environment (distribution, Cinnamon, device/Android version):
+Environment (distribution and Cinnamon or macOS version, device and Android version):
 
 ## Screenshots
 

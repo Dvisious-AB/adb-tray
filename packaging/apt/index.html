@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appninjas ADB apt repository</title>
+</head>
+<body>
+<h1>Appninjas ADB apt repository</h1>
+<p>This is the apt repository for <a href="https://appninjas.se/en/appar/adb">Appninjas ADB</a> (adb-tray).
+Add it and install the package:</p>
+<pre>sudo install -d -m 0755 /etc/apt/keyrings
+curl -fsSL https://dvisious-ab.github.io/adb-tray/appninjas-archive-keyring.gpg \
+  | sudo tee /etc/apt/keyrings/appninjas-archive-keyring.gpg &gt;/dev/null
+echo "deb [signed-by=/etc/apt/keyrings/appninjas-archive-keyring.gpg] https://dvisious-ab.github.io/adb-tray stable main" \
+  | sudo tee /etc/apt/sources.list.d/appninjas.list
+sudo apt update
+sudo apt install adb-tray</pre>
+<p>Source code: <a href="https://github.com/Dvisious-AB/adb-tray">github.com/Dvisious-AB/adb-tray</a></p>
+</body>
+</html>

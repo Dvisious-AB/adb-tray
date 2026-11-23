@@ -1,0 +1,21 @@
+Appninjas ADB (adb-tray)
+Copyright (c) 2026 Anders Elmén and Dvisious AB
+
+The source code is licensed under the MIT License; see LICENSE. Two groups of files in this
+repository are not covered by that licence.
+
+1. The Appninjas name and logo
+
+   branding/symbol.svg and branding/appninjas-adb.svg, and every icon built from them (the macOS
+   app icon AppIcon.icns and the installed appninjas-adb.svg), show the Appninjas logo. The logo
+   and the name "Appninjas" are trademarks of Dvisious AB. All rights reserved.
+
+   They may be distributed unchanged as part of this program, including in packages built from
+   this repository. They may not be modified or used for anything else. If you publish a modified
+   version of the program, replace the logo and do not call it Appninjas.
+
+2. Phosphor Icons
+
+   The icons in branding/phosphor/ come unchanged from @phosphor-icons/core 2.1.1
+   (https://phosphoricons.com), Copyright (c) 2023 Phosphor Icons, under the MIT License; see
+   branding/phosphor/LICENSE.

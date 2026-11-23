@@ -1,0 +1,37 @@
+{
+	"$comment": "The manual for Appninjas ADB, built with appninjas-help from appninjas.se (docs/hjalp/). Ids are URLs and freeze at the first public release.",
+	"product": "adb",
+	"name": {
+		"sv": "Appninjas ADB",
+		"en-GB": "Appninjas ADB"
+	},
+	"locales": ["sv", "en-GB"],
+	"sourceLocale": "sv",
+	"chapters": [
+		{
+			"id": "start",
+			"title": { "sv": "Kom igång", "en-GB": "Getting started" },
+			"articles": ["install-mac", "install-linux", "connect-usb", "mirror-screen", "connect-wifi"]
+		},
+		{
+			"id": "device",
+			"title": { "sv": "Enheten", "en-GB": "The device" },
+			"articles": ["rotate-screen", "screenshot-and-shell"]
+		},
+		{
+			"id": "problems",
+			"title": { "sv": "Om något inte fungerar", "en-GB": "When something does not work" },
+			"articles": ["troubleshooting", "version"]
+		}
+	],
+	"start": ["install-mac", "install-linux", "connect-usb", "mirror-screen", "connect-wifi"],
+	"searchExample": { "sv": "spegla skärmen", "en-GB": "mirror the screen" },
+	"commonSearches": {
+		"sv": ["spegla", "wi-fi", "usb", "version"],
+		"en-GB": ["mirror", "wi-fi", "usb", "version"]
+	},
+	"strings": {
+		"sv": "strings/sv.json",
+		"en-GB": "strings/en-GB.json"
+	}
+}

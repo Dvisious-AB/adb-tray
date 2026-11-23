@@ -1,0 +1,11 @@
+{
+  "source": {
+    "tile": "varumarke/tokens.json: farg.ljus.bakgrund",
+    "mainForm": "varumarke/tokens.json: farg.ljus.text",
+    "band": "varumarke/tokens.json: logotyp.bandLjus"
+  },
+  "symbolSha256": "134dff045f66f4c4bf5bc5503a3ee6cc94327f05fed09f2d2fabf61dfd44ca6b",
+  "tile": "#f6f7f7",
+  "mainForm": "#121718",
+  "band": "#0b6670"
+}

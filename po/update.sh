@@ -7,9 +7,14 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 extract() {
     xgettext -L Python --from-code=UTF-8 --keyword=_ --keyword=ngettext:1,2 \
-        --package-name=adb-tray --msgid-bugs-address=https://github.com/aelmen/adb-tray/issues \
+        --package-name=adb-tray --msgid-bugs-address=https://github.com/Dvisious-AB/adb-tray/issues \
         --add-comments=Translators: --omit-header -o - adb-tray.py
-    xgettext -L Desktop --keyword=Name --keyword=Comment --omit-header -o - adb-tray.desktop.in
+    # The macOS app reuses the same catalogue. xgettext has no Swift parser, but tr("...") and
+    # trn("...", "...", n) are C-shaped enough for its C parser.
+    xgettext -L C --from-code=UTF-8 --keyword= --keyword=tr --keyword=trn:1,2 \
+        --add-comments=Translators: --omit-header -o - macos/Sources/AdbTray/*.swift
+    # Name is the product name, which is not translated; only Comment is.
+    xgettext -L Desktop --keyword= --keyword=Comment --omit-header -o - adb-tray.desktop.in
 }
 
 msgids() { msgcat --no-location --sort-output "$@" 2>/dev/null | grep -E '^msgid' || true; }
