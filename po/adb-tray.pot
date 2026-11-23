@@ -142,5 +142,14 @@ msgstr ""
 msgid "adb-tray is already running"
 msgstr ""
 
+msgid "Copy the install command"
+msgstr ""
+
+msgid "scrcpy is not installed"
+msgstr ""
+
+msgid "Copied to the clipboard: {command}"
+msgstr ""
+
 msgid "System tray icon for adb devices and scrcpy screen mirroring"
 msgstr ""

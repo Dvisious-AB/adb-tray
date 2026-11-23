@@ -157,5 +157,14 @@ msgstr "adb saknas"
 msgid "adb-tray is already running"
 msgstr "adb-tray körs redan"
 
+msgid "Copy the install command"
+msgstr "Kopiera installationskommandot"
+
+msgid "scrcpy is not installed"
+msgstr "scrcpy saknas"
+
+msgid "Copied to the clipboard: {command}"
+msgstr "Kopierat till urklipp: {command}"
+
 msgid "System tray icon for adb devices and scrcpy screen mirroring"
 msgstr "Ikon i systemfältet för adb-enheter och scrcpy-spegling"
