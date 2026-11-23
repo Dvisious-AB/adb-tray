@@ -1,0 +1,89 @@
+name: Release
+
+# Runs only when a v* tag is pushed. Builds the Debian package, publishes a GitHub release with it, and
+# adds it to the signed apt repository on the gh-pages branch (served by GitHub Pages). Earlier versions
+# stay in the repository.
+#
+# Needs the secret APT_GPG_PRIVATE_KEY (an armored secret key) and, if that key has one,
+# APT_GPG_PASSPHRASE. See packaging/apt/README.md.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apt-repository
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the tag against VERSION
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          if [[ "$version" != "$(tr -d '[:space:]' < VERSION)" ]]; then
+            echo "::error::The tag $GITHUB_REF_NAME does not match VERSION ($(cat VERSION)). Update VERSION first."
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+      - name: Install tools
+        run: sudo apt-get install -y --no-install-recommends gettext apt-utils
+
+      - name: Build the package
+        run: echo "DEB=$(packaging/debian/build-deb.sh --version "$VERSION" --output dist)" >> "$GITHUB_ENV"
+
+      - name: Import the signing key
+        env:
+          APT_GPG_PRIVATE_KEY: ${{ secrets.APT_GPG_PRIVATE_KEY }}
+        run: |
+          if [[ -z "$APT_GPG_PRIVATE_KEY" ]]; then
+            echo "::error::The secret APT_GPG_PRIVATE_KEY is not set. See packaging/apt/README.md."
+            exit 1
+          fi
+          printf '%s\n' "$APT_GPG_PRIVATE_KEY" | gpg --batch --import
+
+      - name: Update the apt repository
+        env:
+          APT_GPG_PASSPHRASE: ${{ secrets.APT_GPG_PASSPHRASE }}
+        run: |
+          if git ls-remote --exit-code --heads origin gh-pages >/dev/null; then
+            git fetch --depth=1 origin gh-pages:gh-pages
+            git worktree add site gh-pages
+          else
+            git worktree add --orphan -b gh-pages site
+          fi
+          packaging/apt/update-repo.sh site "$DEB"
+          install -m 644 packaging/apt/index.html site/index.html
+          cd site
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -m "Add adb-tray $VERSION"
+          git push origin gh-pages
+
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "$DEB" --verify-tag --generate-notes \
+            --title "Appninjas ADB $VERSION"
+
+      - name: Values for the Homebrew formula
+        run: |
+          url="https://github.com/${GITHUB_REPOSITORY}/archive/refs/tags/${GITHUB_REF_NAME}.tar.gz"
+          sha="$(curl -fsSL "$url" | sha256sum | cut -d' ' -f1)"
+          {
+            echo "### Homebrew"
+            echo "Update Formula/adb-tray.rb in Dvisious-AB/homebrew-tap:"
+            echo '```ruby'
+            echo "  url \"$url\""
+            echo "  sha256 \"$sha\""
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
