@@ -30,7 +30,7 @@ before you spend time on it.
 | `packaging/debian/` | Builds the `.deb` |
 | `packaging/apt/` | Maintains the apt repository on `gh-pages`; see [packaging/apt/README.md](packaging/apt/README.md) |
 | `packaging/homebrew/` | The Homebrew formula, published in [Dvisious-AB/homebrew-tap](https://github.com/Dvisious-AB/homebrew-tap) |
-| `help/` | The manual on appninjas.se/hjalp/adb; see [help/README.md](help/README.md) |
+| `help/` | The manual on appninjas.se/adb/help/<language>; see [help/README.md](help/README.md) |
 | `VERSION` | The release version, used by every build |
 
 Both apps have the same menu and the same behaviour. A change to one should be made in the other too.

@@ -6,6 +6,20 @@ public enum Product {
     public static let name = "Appninjas ADB"
     public static let command = "adb-tray"
     public static let repository = URL(string: "https://github.com/Dvisious-AB/adb-tray")!
-    /// The English help page. Each translation points to the page in its own language (see po/*.po).
-    public static let helpPageEnglish = "https://appninjas.se/en/hjalp/adb"
+    /// The help pages: `helpBase/<language>`, with the two-letter language code (ISO 639-1).
+    /// appninjas.se shows the manual in that language, or in English when there is none.
+    public static let helpBase = "https://appninjas.se/adb/help"
+
+    /// The language code of the first preferred language (`sv-SE` gives `sv`), or `en`.
+    public static func helpLanguage(_ preferred: [String]) -> String {
+        for tag in preferred {
+            let code = tag.split(whereSeparator: { "-_.@".contains($0) }).first.map { $0.lowercased() } ?? ""
+            if (2...3).contains(code.count), code.allSatisfy(\.isLetter) { return code }
+        }
+        return "en"
+    }
+
+    public static func helpURL(preferred: [String]) -> URL {
+        URL(string: "\(helpBase)/\(helpLanguage(preferred))")!
+    }
 }

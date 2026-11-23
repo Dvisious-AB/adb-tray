@@ -353,10 +353,9 @@ final class TrayController: NSObject, NSMenuDelegate {
 
     // MARK: - Dialogs
 
-    /// The help page in the menu's language: the address is itself a translated string.
+    /// The help page in the user's first preferred language.
     private var helpURL: URL {
-        // Translators: the address of the help page in your language, or leave the English page.
-        URL(string: tr("https://appninjas.se/en/hjalp/adb")) ?? URL(string: Product.helpPageEnglish)!
+        Product.helpURL(preferred: Locale.preferredLanguages)
     }
 
     /// The standard About panel, with the version, the help page, the source and the licences.

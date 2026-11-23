@@ -28,6 +28,8 @@ use tray_icon::{Icon, TrayIcon, TrayIconBuilder};
 
 /// The translations for the user's language, chosen once at start.
 static CATALOG: OnceLock<Catalog> = OnceLock::new();
+/// The help page in the user's language, chosen once at start.
+pub static HELP_URL: OnceLock<String> = OnceLock::new();
 
 pub fn tr(msgid: &str) -> &str {
     CATALOG.get().map(|c| c.gettext(msgid)).unwrap_or(msgid)
@@ -108,6 +110,7 @@ fn main() {
         .collect();
     languages.extend(sys_locale::get_locales());
     let _ = CATALOG.set(Catalog::for_languages(&languages).0);
+    let _ = HELP_URL.set(product::help_url(&product::help_language(&languages)));
 
     let support_dir = platform::support_dir();
     let _ = std::fs::create_dir_all(&support_dir);

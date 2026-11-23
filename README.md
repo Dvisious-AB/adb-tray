@@ -10,7 +10,8 @@ Appninjas ADB runs on **macOS** (a menu bar app) and on **Linux Mint / Cinnamon*
 [`adb`](https://developer.android.com/tools/adb) and [`scrcpy`](https://github.com/Genymobile/scrcpy). The
 command and the package are called `adb-tray`. Product page:
 [appninjas.se/appar/adb](https://appninjas.se/appar/adb). The manual, which **Help** in the menu opens:
-[appninjas.se/hjalp/adb](https://appninjas.se/hjalp/adb).
+[appninjas.se/adb/help/sv](https://appninjas.se/adb/help/sv), in English
+[appninjas.se/adb/help/en](https://appninjas.se/adb/help/en).
 
 ```text
 [icon] ─┬─ SM-X210  (USB)        ─┬─ Mirror screen

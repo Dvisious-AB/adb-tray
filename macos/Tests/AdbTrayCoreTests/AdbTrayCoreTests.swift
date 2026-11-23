@@ -161,3 +161,12 @@ final class CatalogTests: XCTestCase {
         }
     }
 }
+
+final class ProductTests: XCTestCase {
+    func testHelpLinksUseTheTwoLetterLanguageCode() {
+        XCTAssertEqual(Product.helpLanguage(["sv-SE", "en-US"]), "sv")
+        XCTAssertEqual(Product.helpLanguage(["zh-Hans-CN"]), "zh")
+        XCTAssertEqual(Product.helpLanguage([]), "en")
+        XCTAssertEqual(Product.helpURL(preferred: ["fi-FI"]).absoluteString, "https://appninjas.se/adb/help/fi")
+    }
+}

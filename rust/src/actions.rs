@@ -16,10 +16,7 @@ pub fn run(action: Action, shared: &Arc<Shared>, hosts: &[String]) {
     match action {
         Action::Refresh => shared.poll_now(),
         Action::Help => {
-            let url = tr(product::HELP_URL_ENGLISH);
-            if opener::open_browser(url).is_err() {
-                let _ = opener::open_browser(product::HELP_URL_ENGLISH);
-            }
+            let _ = opener::open_browser(help_url());
         }
         Action::About => about(),
         Action::CopyInstall(command) => {
@@ -334,7 +331,7 @@ fn about() {
         String::new(),
         tr("System tray icon for adb devices and scrcpy screen mirroring").to_string(),
         String::new(),
-        format!("{}: {}", tr("Help and common questions"), tr(product::HELP_URL_ENGLISH)),
+        format!("{}: {}", tr("Help and common questions"), help_url()),
         format!("{}: {}", tr("Source code on GitHub"), product::REPOSITORY),
         String::new(),
         tr("The program is free software under the MIT License. The Appninjas name and logo are trademarks of Dvisious AB and are not covered by the MIT License.").to_string(),
@@ -343,6 +340,10 @@ fn about() {
     .join("\n");
     let title = format(tr("About {name}"), &[("name", &product::NAME)]);
     tinyfiledialogs::message_box_ok(&title, &text, tinyfiledialogs::MessageBoxIcon::Info);
+}
+
+fn help_url() -> String {
+    crate::HELP_URL.get().cloned().unwrap_or_else(|| product::help_url("en"))
 }
 
 pub fn notify(message: &str) {

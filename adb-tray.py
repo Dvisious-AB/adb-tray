@@ -4,6 +4,7 @@ import contextlib
 import fcntl
 import gettext
 import json
+import os
 import re
 import shlex
 import shutil
@@ -33,8 +34,9 @@ APP = "Appninjas ADB"
 # Replaced with the release version when the program is installed or packaged; see VERSION.
 VERSION = "@VERSION@"
 REPOSITORY = "https://github.com/Dvisious-AB/adb-tray"
-# Translators: the address of the help page in your language, or leave the English page.
-HELP_URL = _("https://appninjas.se/en/hjalp/adb")
+# The help pages: HELP_BASE/<language>, with the desktop's two-letter language code (ISO 639-1).
+# appninjas.se shows the manual in that language, or in English when there is none.
+HELP_BASE = "https://appninjas.se/adb/help"
 _HERE = Path(__file__).resolve().parent
 # Icon theme names, installed by install.sh and the Debian package. Run from a checkout, the files in
 # branding/ are used directly.
@@ -57,6 +59,19 @@ def version():
     with contextlib.suppress(OSError):
         return (_HERE / "VERSION").read_text().strip() + "-dev"
     return "dev"
+
+
+def help_language():
+    """The desktop's language as a two- or three-letter code, from the same variables gettext reads."""
+    for variable in ("LANGUAGE", "LC_ALL", "LC_MESSAGES", "LANG"):
+        for tag in os.environ.get(variable, "").split(":"):
+            code = re.split(r"[-_.@]", tag)[0].lower()
+            if 2 <= len(code) <= 3 and code.isalpha() and code != "c":
+                return code
+    return "en"
+
+
+HELP_URL = f"{HELP_BASE}/{help_language()}"
 
 
 def icon(kind):
