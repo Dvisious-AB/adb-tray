@@ -1,0 +1,46 @@
+[package]
+name = "adb-tray"
+description = "Appninjas ADB: adb devices and scrcpy screen mirroring from the menu bar or system tray"
+version = "0.0.0"  # The release version comes from ../VERSION; see build.rs.
+edition = "2024"
+license = "MIT"
+repository = "https://github.com/Dvisious-AB/adb-tray"
+publish = false
+build = "build.rs"
+
+[lib]
+name = "adb_tray"
+path = "src/lib.rs"
+
+[[bin]]
+name = "adb-tray"
+path = "src/main.rs"
+
+[dependencies]
+serde_json = "1"
+dirs = "7"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+resvg = { version = "0.50", default-features = false }
+tray-icon = "0.26"
+tao = "0.37"
+notify-rust = "4"
+tinyfiledialogs = "3"
+arboard = { version = "3", default-features = false }
+opener = "0.9"
+sys-locale = "0.3"
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_System_Console", "Win32_UI_Shell", "Win32_UI_WindowsAndMessaging"] }
+
+[build-dependencies]
+resvg = { version = "0.50", default-features = false }
+ico = "0.6"
+# Used only when the target is Windows; a build dependency runs on the host, so it is not target-gated.
+winresource = "0.1"
+
+
+[profile.release]
+opt-level = "s"
+lto = true
+strip = true
+codegen-units = 1
