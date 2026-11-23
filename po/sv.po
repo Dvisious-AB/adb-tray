@@ -1,13 +1,13 @@
-# Swedish translations for adb-tray.
+# Swedish translations for adb-tray (Appninjas ADB).
 # Copyright (C) 2026 Anders Elmén
 # This file is distributed under the same license as the adb-tray package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: adb-tray\n"
-"Report-Msgid-Bugs-To: https://github.com/aelmen/adb-tray/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/Dvisious-AB/adb-tray/issues\n"
 "POT-Creation-Date: 2026-09-28 18:06+0200\n"
-"PO-Revision-Date: 2026-09-28 18:06+0200\n"
+"PO-Revision-Date: 2026-11-23 12:30+0100\n"
 "Last-Translator: Anders Elmén\n"
 "Language-Team: Swedish\n"
 "Language: sv\n"
@@ -16,16 +16,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "ADB Devices"
-msgstr "ADB-enheter"
+#. Translators: the address of the help page in your language, or leave the English page.
+msgid "https://appninjas.se/en/appar/adb"
+msgstr "https://appninjas.se/appar/adb"
 
 #, python-brace-format
 msgid "Connected to {host}"
 msgstr "Ansluten till {host}"
 
 #, python-brace-format
-msgid "Could not connect to {host}"
-msgstr "Kunde inte ansluta till {host}"
+msgid "Could not connect to {host}. Check that the device is on the same network and that wireless debugging is on."
+msgstr "Kunde inte ansluta till {host}. Kontrollera att enheten är på samma nätverk och att trådlös felsökning är påslagen."
 
 #, python-brace-format
 msgid "{n} device connected"
@@ -55,7 +56,14 @@ msgid "Refresh"
 msgstr "Uppdatera"
 
 msgid "Restart adb server"
-msgstr "Starta om adb-server"
+msgstr "Starta om adb-servern"
+
+msgid "Help"
+msgstr "Hjälp"
+
+#, python-brace-format
+msgid "About {name}"
+msgstr "Om {name}"
 
 msgid "Quit"
 msgstr "Avsluta"
@@ -64,25 +72,25 @@ msgid "authorize on device"
 msgstr "godkänn på enheten"
 
 msgid "offline"
-msgstr "offline"
+msgstr "svarar inte"
 
 msgid "Stop mirroring"
-msgstr "Stoppa spegling"
+msgstr "Stoppa speglingen"
 
 msgid "Mirror screen"
 msgstr "Spegla skärmen"
 
 msgid "Lock portrait"
-msgstr "Lås porträtt"
+msgstr "Lås stående"
 
 msgid "Lock landscape"
-msgstr "Lås landskap"
+msgstr "Lås liggande"
 
 msgid "Auto-rotate"
-msgstr "Autorotation"
+msgstr "Rotera automatiskt"
 
-msgid "Screenshot"
-msgstr "Skärmdump"
+msgid "Take screenshot"
+msgstr "Ta en skärmdump"
 
 msgid "Open adb shell"
 msgstr "Öppna adb shell"
@@ -93,36 +101,51 @@ msgstr "Koppla från"
 msgid "Switch to Wi-Fi"
 msgstr "Växla till Wi-Fi"
 
-msgid "Tap 'Allow' in the dialog on the device"
-msgstr "Tryck på 'Tillåt' i dialogen på enheten"
+msgid "Tap Allow in the dialog on the device"
+msgstr "Tryck på Tillåt i dialogrutan på enheten"
 
 #, python-brace-format
 msgid "Serial number: {serial}"
 msgstr "Serienummer: {serial}"
 
 #, python-brace-format
-msgid "scrcpy exited with an error ({code}). See {log}"
-msgstr "scrcpy avslutades med fel ({code}). Se {log}"
+msgid "Mirroring stopped because scrcpy exited with error {code}. The details are in {log}."
+msgstr "Speglingen stoppades eftersom scrcpy avslutades med fel {code}. Detaljerna finns i {log}."
 
-msgid "Screenshot failed"
-msgstr "Skärmdumpen misslyckades"
+msgid "Could not take a screenshot. Check that the device is connected and unlocked, and try again."
+msgstr "Det gick inte att ta en skärmdump. Kontrollera att enheten är ansluten och upplåst och försök igen."
 
 #, python-brace-format
 msgid "Screenshot saved: {path}"
-msgstr "Skärmdump sparad: {path}"
+msgstr "Skärmdumpen är sparad i {path}"
 
-msgid "No terminal emulator found"
-msgstr "Hittar ingen terminal"
+msgid "Could not open adb shell because no terminal program was found. Install one, for example gnome-terminal."
+msgstr "Kunde inte öppna adb shell eftersom inget terminalprogram hittades. Installera ett, till exempel gnome-terminal."
 
-msgid "The device does not seem to be connected to Wi-Fi"
-msgstr "Enheten verkar inte vara ansluten till Wi-Fi"
+msgid "Could not switch to Wi-Fi because the device has no Wi-Fi address. Connect it to a Wi-Fi network and try again."
+msgstr "Kunde inte växla till Wi-Fi eftersom enheten saknar Wi-Fi-adress. Anslut den till ett Wi-Fi-nätverk och försök igen."
 
 #, python-brace-format
-msgid "Disconnected: {serial}"
-msgstr "Frånkopplad: {serial}"
+msgid "Disconnected from {serial}"
+msgstr "Frånkopplad från {serial}"
 
 msgid "The adb server has been restarted"
 msgstr "adb-servern har startats om"
+
+msgid "The program is free software under the MIT License. The Appninjas name and logo are trademarks of Dvisious AB and are not covered by the MIT License."
+msgstr "Programmet är fri programvara under MIT-licensen. Namnet och logotypen Appninjas är varumärken som tillhör Dvisious AB och omfattas inte av MIT-licensen."
+
+msgid "System tray icon for adb devices and scrcpy screen mirroring"
+msgstr "Ikon i systemfältet för adb-enheter och skärmspegling med scrcpy"
+
+msgid "Help and common questions"
+msgstr "Hjälp och vanliga frågor"
+
+msgid "Source code on GitHub"
+msgstr "Källkoden på GitHub"
+
+msgid "Icons: Phosphor Icons, MIT License."
+msgstr "Ikoner: Phosphor Icons, MIT-licensen."
 
 msgid "Cancel"
 msgstr "Avbryt"
@@ -145,26 +168,24 @@ msgstr "Parningskod"
 msgid "Connection address (optional)"
 msgstr "Anslutningsadress (valfri)"
 
-msgid "Pairing failed"
-msgstr "Parningen misslyckades"
+msgid "Pairing failed. Check the pairing address and code under Wireless debugging on the device, and try again."
+msgstr "Parningen misslyckades. Kontrollera parningsadressen och koden under Trådlös felsökning på enheten och försök igen."
 
 msgid "Pairing succeeded"
 msgstr "Parningen lyckades"
 
 msgid "adb is not installed"
-msgstr "adb saknas"
+msgstr "adb är inte installerat"
 
-msgid "adb-tray is already running"
-msgstr "adb-tray körs redan"
+#, python-brace-format
+msgid "{name} is already running"
+msgstr "{name} körs redan"
 
 msgid "Copy the install command"
 msgstr "Kopiera installationskommandot"
 
 msgid "scrcpy is not installed"
-msgstr "scrcpy saknas"
+msgstr "scrcpy är inte installerat"
 
-msgid "Copied to the clipboard: {command}"
-msgstr "Kopierat till urklipp: {command}"
-
-msgid "System tray icon for adb devices and scrcpy screen mirroring"
-msgstr "Ikon i systemfältet för adb-enheter och scrcpy-spegling"
+msgid "Copied {command}. Paste it into Terminal to install."
+msgstr "{command} är kopierat. Klistra in det i Terminal för att installera."

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""System tray icon for adb devices and scrcpy mirroring (Cinnamon / XApp)."""
+"""Appninjas ADB: a system tray icon for adb devices and scrcpy mirroring (Cinnamon / XApp)."""
 import contextlib
 import fcntl
 import gettext
@@ -28,14 +28,43 @@ _translation = gettext.translation(
 _ = _translation.gettext
 ngettext = _translation.ngettext
 
-APP = _("ADB Devices")
-ICON = "scrcpy"
+# The product name follows the Appninjas product architecture and is not translated.
+APP = "Appninjas ADB"
+# Replaced with the release version when the program is installed or packaged; see VERSION.
+VERSION = "@VERSION@"
+REPOSITORY = "https://github.com/Dvisious-AB/adb-tray"
+# Translators: the address of the help page in your language, or leave the English page.
+HELP_URL = _("https://appninjas.se/en/appar/adb")
+_HERE = Path(__file__).resolve().parent
+# Icon theme names, installed by install.sh and the Debian package. Run from a checkout, the files in
+# branding/ are used directly.
+ICONS = {
+    "app": ("appninjas-adb", _HERE / "branding" / "appninjas-adb.svg"),
+    "tray": ("appninjas-adb-symbolic", _HERE / "branding" / "phosphor" / "device-mobile-fill.svg"),
+    "mirroring": ("appninjas-adb-mirroring-symbolic", _HERE / "branding" / "phosphor" / "screencast-fill.svg"),
+}
 POLL_SECONDS = 4
 TCP_PORT = 5555
 CONFIG_DIR = Path.home() / ".config" / "adb-tray"
 HOSTS_FILE = CONFIG_DIR / "hosts.json"
 LEGACY_IP_FILE = Path.home() / ".config" / "tablet-mirror" / "ip"
 SCRCPY_OPTS = ["-m", "1600", "--stay-awake"]
+
+
+def version():
+    if not VERSION.startswith("@"):
+        return VERSION
+    with contextlib.suppress(OSError):
+        return (_HERE / "VERSION").read_text().strip() + "-dev"
+    return "dev"
+
+
+def icon(kind):
+    """The installed icon's theme name, or the file in the checkout when it is not installed."""
+    name, path = ICONS[kind]
+    if Gtk.IconTheme.get_default().has_icon(name) or not path.exists():
+        return name
+    return str(path)
 
 
 def adb(*args, serial=None, timeout=15):
@@ -48,7 +77,7 @@ def adb(*args, serial=None, timeout=15):
 
 
 def notify(msg):
-    subprocess.Popen(["notify-send", "-i", ICON, APP, msg])
+    subprocess.Popen(["notify-send", "-i", icon("app"), APP, msg])
 
 
 def list_devices():
@@ -96,14 +125,14 @@ def connect_host(host):
         save_host(host)
         notify(_("Connected to {host}").format(host=host))
     else:
-        notify(_("Could not connect to {host}").format(host=host) + f"\n{out}")
+        notify(_("Could not connect to {host}. Check that the device is on the same network and that wireless debugging is on.").format(host=host) + f"\n{out}")
 
 
 class Tray:
     def __init__(self):
         self.icon = XApp.StatusIcon()
         self.icon.set_name("adb-tray")
-        self.icon.set_icon_name(ICON)
+        self.icon.set_icon_name(icon("tray"))
         self.icon.set_tooltip_text(APP)
         self.mirrors = {}
         self.devices = []
@@ -136,6 +165,7 @@ class Tray:
             tooltip += ", " + ngettext("{n} mirroring", "{n} mirroring",
                                        len(self.mirrors)).format(n=len(self.mirrors))
         self.icon.set_tooltip_text(tooltip)
+        self.icon.set_icon_name(icon("mirroring" if self.mirrors else "tray"))
         signature = (tuple((d["serial"], d["state"], d["model"]) for d in devices),
                      tuple(sorted(self.mirrors)), tuple(load_hosts()))
         if signature != self.signature and not (self.menu and self.menu.get_visible()):
@@ -181,6 +211,8 @@ class Tray:
         menu.append(self.item(_("Refresh"), self.poll))
         menu.append(self.item(_("Restart adb server"), self.run_bg, self.restart_server))
         menu.append(Gtk.SeparatorMenuItem())
+        menu.append(self.item(_("Help"), self.open_help))
+        menu.append(self.item(_("About {name}").format(name=APP), self.about))
         menu.append(self.item(_("Quit"), Gtk.main_quit))
         menu.show_all()
 
@@ -210,14 +242,14 @@ class Tray:
             sub.append(self.item(_("Lock landscape"), self.run_bg, self.set_rotation, serial, 1))
             sub.append(self.item(_("Auto-rotate"), self.run_bg, self.set_rotation, serial, None))
             sub.append(Gtk.SeparatorMenuItem())
-            sub.append(self.item(_("Screenshot"), self.run_bg, self.screenshot, dev))
+            sub.append(self.item(_("Take screenshot"), self.run_bg, self.screenshot, dev))
             sub.append(self.item(_("Open adb shell"), self.open_shell, serial))
             if dev["wifi"]:
                 sub.append(self.item(_("Disconnect"), self.run_bg, self.disconnect, serial))
             else:
                 sub.append(self.item(_("Switch to Wi-Fi"), self.run_bg, self.switch_to_wifi, serial))
         elif dev["state"] == "unauthorized":
-            sub.append(self.item(_("Tap 'Allow' in the dialog on the device")))
+            sub.append(self.item(_("Tap Allow in the dialog on the device")))
         if dev["wifi"] and dev["state"] != "device":
             sub.append(self.item(_("Disconnect"), self.run_bg, self.disconnect, serial))
         sub.append(Gtk.SeparatorMenuItem())
@@ -241,7 +273,7 @@ class Tray:
         def watch():
             code = proc.wait()
             if code != 0 and time.monotonic() - started < 10:
-                notify(_("scrcpy exited with an error ({code}). See {log}").format(code=code, log=log))
+                notify(_("Mirroring stopped because scrcpy exited with error {code}. The details are in {log}.").format(code=code, log=log))
             GLib.idle_add(self.poll)
 
         threading.Thread(target=watch, daemon=True).start()
@@ -267,7 +299,7 @@ class Tray:
         r = subprocess.run(["adb", "-s", dev["serial"], "exec-out", "screencap", "-p"],
                            capture_output=True, timeout=30, check=False)
         if r.returncode != 0 or not r.stdout:
-            notify(_("Screenshot failed"))
+            notify(_("Could not take a screenshot. Check that the device is connected and unlocked, and try again."))
             return
         target.write_bytes(r.stdout)
         notify(_("Screenshot saved: {path}").format(path=target))
@@ -276,7 +308,7 @@ class Tray:
     def open_shell(serial):
         term = shutil.which("x-terminal-emulator") or shutil.which("gnome-terminal")
         if not term:
-            notify(_("No terminal emulator found"))
+            notify(_("Could not open adb shell because no terminal program was found. Install one, for example gnome-terminal."))
             return
         subprocess.Popen([term, "-e", shlex.join(["adb", "-s", serial, "shell"])])
 
@@ -285,7 +317,7 @@ class Tray:
         _rc, out = adb("shell", "ip", "-f", "inet", "addr", "show", "wlan0", serial=serial)
         match = re.search(r"inet (\d+\.\d+\.\d+\.\d+)", out)
         if not match:
-            notify(_("The device does not seem to be connected to Wi-Fi"))
+            notify(_("Could not switch to Wi-Fi because the device has no Wi-Fi address. Connect it to a Wi-Fi network and try again."))
             return
         adb("tcpip", str(TCP_PORT), serial=serial)
         time.sleep(2)
@@ -294,13 +326,36 @@ class Tray:
     @staticmethod
     def disconnect(serial):
         adb("disconnect", serial)
-        notify(_("Disconnected: {serial}").format(serial=serial))
+        notify(_("Disconnected from {serial}").format(serial=serial))
 
     @staticmethod
     def restart_server():
         adb("kill-server")
         adb("start-server")
         notify(_("The adb server has been restarted"))
+
+    # ---- help and about ------------------------------------------------
+    @staticmethod
+    def open_help():
+        Gtk.show_uri_on_window(None, HELP_URL, Gtk.get_current_event_time())
+
+    @staticmethod
+    def about():
+        notice = _("The program is free software under the MIT License. The Appninjas name and logo are "
+                   "trademarks of Dvisious AB and are not covered by the MIT License.")
+        dialog = Gtk.AboutDialog(
+            program_name=APP, version=version(), logo_icon_name=icon("app"),
+            comments=_("System tray icon for adb devices and scrcpy screen mirroring"),
+            website=HELP_URL, website_label=_("Help and common questions"),
+            copyright="© 2026 Anders Elmén and Dvisious AB", license_type=Gtk.License.MIT_X11,
+        )
+        # "Name url" makes the name a link in GTK's credit sections.
+        dialog.add_credit_section(_("Source code on GitHub"), [f"adb-tray {REPOSITORY}"])
+        dialog.add_credit_section(_("Icons: Phosphor Icons, MIT License."), ["Phosphor Icons https://phosphoricons.com"])
+        dialog.set_comments(f"{dialog.get_comments()}\n\n{notice}")
+        dialog.set_keep_above(True)
+        dialog.run()
+        dialog.destroy()
 
     # ---- dialogs -------------------------------------------------------
     @staticmethod
@@ -342,7 +397,7 @@ class Tray:
         def pair(address, code, connect_to):
             _rc, out = adb("pair", address, code, timeout=20)
             if "Successfully paired" not in out:
-                notify(_("Pairing failed") + f"\n{out}")
+                notify(_("Pairing failed. Check the pairing address and code under Wireless debugging on the device, and try again.") + f"\n{out}")
                 return
             notify(_("Pairing succeeded"))
             if connect_to:
@@ -352,6 +407,9 @@ class Tray:
 
 
 def main():
+    if "--version" in sys.argv[1:]:
+        print(f"adb-tray {version()}")
+        return
     if not shutil.which("adb"):
         print(_("adb is not installed"), file=sys.stderr)
         sys.exit(1)
@@ -361,7 +419,7 @@ def main():
     try:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except OSError:
-        print(_("adb-tray is already running"), file=sys.stderr)
+        print(_("{name} is already running").format(name=APP), file=sys.stderr)
         sys.exit(0)
     adb("start-server")
     Tray()

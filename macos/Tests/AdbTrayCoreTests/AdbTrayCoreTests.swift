@@ -155,7 +155,7 @@ final class CatalogTests: XCTestCase {
         XCTAssertFalse(files.isEmpty)
         for file in files {
             let catalog = Catalog(poText: try String(contentsOf: file, encoding: .utf8))
-            XCTAssertNotEqual(catalog.gettext("ADB Devices"), "ADB Devices", file.lastPathComponent)
+            XCTAssertNotEqual(catalog.gettext("Help"), "Help", file.lastPathComponent)
             XCTAssertNotEqual(catalog.gettext("Copy the install command"), "Copy the install command",
                               file.lastPathComponent)
         }

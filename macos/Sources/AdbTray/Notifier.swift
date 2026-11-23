@@ -1,3 +1,4 @@
+import AdbTrayCore
 import AppKit
 import UserNotifications
 
@@ -15,13 +16,13 @@ enum Notifier {
     static func notify(_ message: String) {
         if hasBundle {
             let content = UNMutableNotificationContent()
-            content.title = tr("ADB Devices")
+            content.title = Product.name
             content.body = message
             let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
             UNUserNotificationCenter.current().add(request)
             return
         }
-        let script = "display notification \(appleScriptString(message)) with title \(appleScriptString(tr("ADB Devices")))"
+        let script = "display notification \(appleScriptString(message)) with title \(appleScriptString(Product.name))"
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
         process.arguments = ["-e", script]

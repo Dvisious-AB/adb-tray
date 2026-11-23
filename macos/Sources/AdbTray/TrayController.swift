@@ -56,7 +56,7 @@ final class TrayController: NSObject, NSMenuDelegate {
             hosts.save(host)
             Notifier.notify(format(tr("Connected to {host}"), ["host": host]))
         } else {
-            Notifier.notify(format(tr("Could not connect to {host}"), ["host": host]) + "\n\(output)")
+            Notifier.notify(format(tr("Could not connect to {host}. Check that the device is on the same network and that wireless debugging is on."), ["host": host]) + "\n\(output)")
         }
     }
 
@@ -80,7 +80,7 @@ final class TrayController: NSObject, NSMenuDelegate {
         self.devices = devices
         mirrors = mirrors.filter { $0.value.isRunning }
         let ready = devices.filter(\.isReady).count
-        var tooltip = "\(tr("ADB Devices")): "
+        var tooltip = "\(Product.name): "
             + format(trn("{n} device connected", "{n} devices connected", ready), ["n": ready])
         if !mirrors.isEmpty {
             tooltip += ", " + format(trn("{n} mirroring", "{n} mirroring", mirrors.count), ["n": mirrors.count])
@@ -111,15 +111,19 @@ final class TrayController: NSObject, NSMenuDelegate {
     // MARK: - Menu
 
     private func updateIcon() {
-        let symbol = mirrors.isEmpty ? "iphone" : "iphone.radiowaves.left.and.right"
-        let image = NSImage(systemSymbolName: symbol, accessibilityDescription: tr("ADB Devices"))
-        image?.isTemplate = true
-        statusItem.button?.image = image
+        let name = mirrors.isEmpty ? Icons.menuBar : Icons.menuBarMirroring
+        // The SF Symbol is only a fallback for a bundle that lacks its icons.
+        let fallback = NSImage(systemSymbolName: mirrors.isEmpty ? "iphone" : "iphone.radiowaves.left.and.right",
+                               accessibilityDescription: Product.name)
+        fallback?.isTemplate = true
+        statusItem.button?.image = Icons.image(name, size: 18, description: Product.name) ?? fallback
     }
 
-    private func item(_ title: String, action: (() -> Void)? = nil, enabled: Bool = true) -> NSMenuItem {
+    private func item(_ title: String, icon: String? = nil, action: (() -> Void)? = nil,
+                      enabled: Bool = true) -> NSMenuItem {
         let menuItem = ClosureMenuItem(title: title, handler: action)
         menuItem.isEnabled = action != nil && enabled
+        menuItem.image = icon.flatMap { Icons.image($0) }
         return menuItem
     }
 
@@ -130,11 +134,11 @@ final class TrayController: NSObject, NSMenuDelegate {
 
         if adbPath == nil {
             menu.addItem(item(tr("adb is not installed")))
-            menu.addItem(item(tr("Copy the install command"), action: { Self.copy(Self.adbInstallCommand) }))
+            menu.addItem(item(tr("Copy the install command"), icon: "copy", action: { Self.copy(Self.adbInstallCommand) }))
             menu.addItem(.separator())
         } else if tools.scrcpy == nil {
             menu.addItem(item(tr("scrcpy is not installed")))
-            menu.addItem(item(tr("Copy the install command"), action: { Self.copy(Self.scrcpyInstallCommand) }))
+            menu.addItem(item(tr("Copy the install command"), icon: "copy", action: { Self.copy(Self.scrcpyInstallCommand) }))
             menu.addItem(.separator())
         }
 
@@ -147,6 +151,7 @@ final class TrayController: NSObject, NSMenuDelegate {
 
         menu.addItem(.separator())
         let wifi = NSMenuItem(title: tr("Connect via Wi-Fi"), action: nil, keyEquivalent: "")
+        wifi.image = Icons.image("wifi-high")
         let submenu = NSMenu()
         submenu.autoenablesItems = false
         let connected = Set(devices.map(\.serial))
@@ -162,10 +167,16 @@ final class TrayController: NSObject, NSMenuDelegate {
         wifi.isEnabled = adbPath != nil
         menu.addItem(wifi)
 
-        menu.addItem(item(tr("Refresh"), action: { [unowned self] in poll() }))
-        menu.addItem(item(tr("Restart adb server"), action: { [unowned self] in runInBackground { self.restartServer() } },
+        menu.addItem(item(tr("Refresh"), icon: "arrows-clockwise", action: { [unowned self] in poll() }))
+        menu.addItem(item(tr("Restart adb server"), icon: "power", action: { [unowned self] in runInBackground { self.restartServer() } },
                           enabled: adbPath != nil))
         menu.addItem(.separator())
+        menu.addItem(item(tr("Help"), icon: "question", action: { [unowned self] in
+            NSWorkspace.shared.open(helpURL)
+        }))
+        menu.addItem(item(format(tr("About {name}"), ["name": Product.name]), icon: "info", action: { [unowned self] in
+            showAbout()
+        }))
         menu.addItem(item(tr("Quit"), action: { NSApp.terminate(nil) }))
         statusItem.menu = menu
     }
@@ -178,34 +189,35 @@ final class TrayController: NSObject, NSMenuDelegate {
         if !device.isReady { label += " – " + (stateText[device.state] ?? device.state) }
 
         let top = NSMenuItem(title: label, action: nil, keyEquivalent: "")
+        top.image = Icons.image(mirrors[serial] != nil ? Icons.menuBarMirroring : Icons.menuBar)
         let sub = NSMenu()
         sub.autoenablesItems = false
         if device.isReady {
             if mirrors[serial] != nil {
-                sub.addItem(item(tr("Stop mirroring"), action: { [unowned self] in stopMirror(serial) }))
+                sub.addItem(item(tr("Stop mirroring"), icon: "screencast", action: { [unowned self] in stopMirror(serial) }))
             } else {
-                sub.addItem(item(tr("Mirror screen"), action: { [unowned self] in startMirror(device) },
+                sub.addItem(item(tr("Mirror screen"), icon: "screencast", action: { [unowned self] in startMirror(device) },
                                  enabled: tools.scrcpy != nil))
             }
             sub.addItem(.separator())
-            sub.addItem(item(tr("Lock portrait"), action: { [unowned self] in rotate(serial, 0) }))
-            sub.addItem(item(tr("Lock landscape"), action: { [unowned self] in rotate(serial, 1) }))
-            sub.addItem(item(tr("Auto-rotate"), action: { [unowned self] in rotate(serial, nil) }))
+            sub.addItem(item(tr("Lock portrait"), icon: "device-rotate", action: { [unowned self] in rotate(serial, 0) }))
+            sub.addItem(item(tr("Lock landscape"), icon: "device-rotate", action: { [unowned self] in rotate(serial, 1) }))
+            sub.addItem(item(tr("Auto-rotate"), icon: "device-rotate", action: { [unowned self] in rotate(serial, nil) }))
             sub.addItem(.separator())
-            sub.addItem(item(tr("Screenshot"), action: { [unowned self] in runInBackground { self.screenshot(device) } }))
-            sub.addItem(item(tr("Open adb shell"), action: { [unowned self] in openShell(serial) }))
+            sub.addItem(item(tr("Take screenshot"), icon: "camera", action: { [unowned self] in runInBackground { self.screenshot(device) } }))
+            sub.addItem(item(tr("Open adb shell"), icon: "terminal-window", action: { [unowned self] in openShell(serial) }))
             if device.wifi {
-                sub.addItem(item(tr("Disconnect"), action: { [unowned self] in runInBackground { self.disconnect(serial) } }))
+                sub.addItem(item(tr("Disconnect"), icon: "plugs", action: { [unowned self] in runInBackground { self.disconnect(serial) } }))
             } else {
-                sub.addItem(item(tr("Switch to Wi-Fi"), action: { [unowned self] in
+                sub.addItem(item(tr("Switch to Wi-Fi"), icon: "wifi-high", action: { [unowned self] in
                     runInBackground { self.switchToWifi(serial) }
                 }))
             }
         } else if device.state == "unauthorized" {
-            sub.addItem(item(tr("Tap 'Allow' in the dialog on the device")))
+            sub.addItem(item(tr("Tap Allow in the dialog on the device")))
         }
         if device.wifi && !device.isReady {
-            sub.addItem(item(tr("Disconnect"), action: { [unowned self] in runInBackground { self.disconnect(serial) } }))
+            sub.addItem(item(tr("Disconnect"), icon: "plugs", action: { [unowned self] in runInBackground { self.disconnect(serial) } }))
         }
         sub.addItem(.separator())
         sub.addItem(item(format(tr("Serial number: {serial}"), ["serial": serial])))
@@ -223,7 +235,7 @@ final class TrayController: NSObject, NSMenuDelegate {
     private static func copy(_ text: String) {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(text, forType: .string)
-        Notifier.notify(format(tr("Copied to the clipboard: {command}"), ["command": text]))
+        Notifier.notify(format(tr("Copied {command}. Paste it into Terminal to install."), ["command": text]))
     }
 
     // MARK: - Actions
@@ -250,7 +262,7 @@ final class TrayController: NSObject, NSMenuDelegate {
             try? logHandle.close()
             let code = finished.terminationStatus
             if code != 0 && Date().timeIntervalSince(started) < 10 {
-                Notifier.notify(format(tr("scrcpy exited with an error ({code}). See {log}"),
+                Notifier.notify(format(tr("Mirroring stopped because scrcpy exited with error {code}. The details are in {log}."),
                                        ["code": code, "log": log.path]))
             }
             DispatchQueue.main.async { self?.poll() }
@@ -293,7 +305,7 @@ final class TrayController: NSObject, NSMenuDelegate {
         let target = pictures.appendingPathComponent("\(name)-\(stamp.string(from: Date())).png")
         let result = tools.run(adbPath, ["-s", device.serial, "exec-out", "screencap", "-p"], timeout: 30)
         guard result.status == 0, !result.data.isEmpty, (try? result.data.write(to: target)) != nil else {
-            Notifier.notify(tr("Screenshot failed"))
+            Notifier.notify(tr("Could not take a screenshot. Check that the device is connected and unlocked, and try again."))
             return
         }
         Notifier.notify(format(tr("Screenshot saved: {path}"), ["path": target.path]))
@@ -320,7 +332,7 @@ final class TrayController: NSObject, NSMenuDelegate {
     private func switchToWifi(_ serial: String) {
         let (_, output) = adb(["shell", "ip", "-f", "inet", "addr", "show", "wlan0"], serial: serial)
         guard let address = wifiAddress(fromIpOutput: output) else {
-            Notifier.notify(tr("The device does not seem to be connected to Wi-Fi"))
+            Notifier.notify(tr("Could not switch to Wi-Fi because the device has no Wi-Fi address. Connect it to a Wi-Fi network and try again."))
             return
         }
         _ = adb(["tcpip", String(Self.tcpPort)], serial: serial)
@@ -330,7 +342,7 @@ final class TrayController: NSObject, NSMenuDelegate {
 
     private func disconnect(_ serial: String) {
         _ = adb(["disconnect", serial])
-        Notifier.notify(format(tr("Disconnected: {serial}"), ["serial": serial]))
+        Notifier.notify(format(tr("Disconnected from {serial}"), ["serial": serial]))
     }
 
     private func restartServer() {
@@ -340,6 +352,42 @@ final class TrayController: NSObject, NSMenuDelegate {
     }
 
     // MARK: - Dialogs
+
+    /// The help page in the menu's language: the address is itself a translated string.
+    private var helpURL: URL {
+        // Translators: the address of the help page in your language, or leave the English page.
+        URL(string: tr("https://appninjas.se/en/appar/adb")) ?? URL(string: Product.helpPageEnglish)!
+    }
+
+    /// The standard About panel, with the version, the help page, the source and the licences.
+    private func showAbout() {
+        let lines: [(String, URL?)] = [
+            (tr("Help and common questions"), helpURL),
+            (tr("Source code on GitHub"), Product.repository),
+            (tr("The program is free software under the MIT License. The Appninjas name and logo are trademarks of Dvisious AB and are not covered by the MIT License."), nil),
+            (tr("Icons: Phosphor Icons, MIT License."), nil),
+        ]
+        let credits = NSMutableAttributedString()
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = .center
+        paragraph.paragraphSpacing = 6
+        for (index, (text, link)) in lines.enumerated() {
+            var attributes: [NSAttributedString.Key: Any] = [
+                .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
+                .foregroundColor: NSColor.labelColor,
+                .paragraphStyle: paragraph,
+            ]
+            if let link { attributes[.link] = link }
+            credits.append(NSAttributedString(string: text + (index < lines.count - 1 ? "\n" : ""), attributes: attributes))
+        }
+        NSApp.activate(ignoringOtherApps: true)
+        NSApp.orderFrontStandardAboutPanel(options: [
+            .applicationName: Product.name,
+            .applicationVersion: appVersion,
+            .version: "",  // hides the build number in parentheses; the version says it all
+            .credits: credits,
+        ])
+    }
 
     private func dialogConnect() {
         let saved = hosts.load()
@@ -360,7 +408,7 @@ final class TrayController: NSObject, NSMenuDelegate {
         runInBackground {
             let (_, output) = self.adb(["pair", address, code], timeout: 20)
             guard output.contains("Successfully paired") else {
-                Notifier.notify(tr("Pairing failed") + "\n\(output)")
+                Notifier.notify(tr("Pairing failed. Check the pairing address and code under Wireless debugging on the device, and try again.") + "\n\(output)")
                 return
             }
             Notifier.notify(tr("Pairing succeeded"))

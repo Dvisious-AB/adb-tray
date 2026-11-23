@@ -1,7 +1,8 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "ADB Devices"
+#. Translators: the address of the help page in your language, or leave the English page.
+msgid "https://appninjas.se/en/appar/adb"
 msgstr ""
 
 #, python-brace-format
@@ -9,7 +10,9 @@ msgid "Connected to {host}"
 msgstr ""
 
 #, python-brace-format
-msgid "Could not connect to {host}"
+msgid ""
+"Could not connect to {host}. Check that the device is on the same network "
+"and that wireless debugging is on."
 msgstr ""
 
 #, python-brace-format
@@ -42,6 +45,13 @@ msgstr ""
 msgid "Restart adb server"
 msgstr ""
 
+msgid "Help"
+msgstr ""
+
+#, python-brace-format
+msgid "About {name}"
+msgstr ""
+
 msgid "Quit"
 msgstr ""
 
@@ -66,7 +76,7 @@ msgstr ""
 msgid "Auto-rotate"
 msgstr ""
 
-msgid "Screenshot"
+msgid "Take screenshot"
 msgstr ""
 
 msgid "Open adb shell"
@@ -78,7 +88,7 @@ msgstr ""
 msgid "Switch to Wi-Fi"
 msgstr ""
 
-msgid "Tap 'Allow' in the dialog on the device"
+msgid "Tap Allow in the dialog on the device"
 msgstr ""
 
 #, python-brace-format
@@ -86,27 +96,52 @@ msgid "Serial number: {serial}"
 msgstr ""
 
 #, python-brace-format
-msgid "scrcpy exited with an error ({code}). See {log}"
+msgid ""
+"Mirroring stopped because scrcpy exited with error {code}. The details are "
+"in {log}."
 msgstr ""
 
-msgid "Screenshot failed"
+msgid ""
+"Could not take a screenshot. Check that the device is connected and "
+"unlocked, and try again."
 msgstr ""
 
 #, python-brace-format
 msgid "Screenshot saved: {path}"
 msgstr ""
 
-msgid "No terminal emulator found"
+msgid ""
+"Could not open adb shell because no terminal program was found. Install one, "
+"for example gnome-terminal."
 msgstr ""
 
-msgid "The device does not seem to be connected to Wi-Fi"
+msgid ""
+"Could not switch to Wi-Fi because the device has no Wi-Fi address. Connect "
+"it to a Wi-Fi network and try again."
 msgstr ""
 
 #, python-brace-format
-msgid "Disconnected: {serial}"
+msgid "Disconnected from {serial}"
 msgstr ""
 
 msgid "The adb server has been restarted"
+msgstr ""
+
+msgid ""
+"The program is free software under the MIT License. The Appninjas name and "
+"logo are trademarks of Dvisious AB and are not covered by the MIT License."
+msgstr ""
+
+msgid "System tray icon for adb devices and scrcpy screen mirroring"
+msgstr ""
+
+msgid "Help and common questions"
+msgstr ""
+
+msgid "Source code on GitHub"
+msgstr ""
+
+msgid "Icons: Phosphor Icons, MIT License."
 msgstr ""
 
 msgid "Cancel"
@@ -130,7 +165,9 @@ msgstr ""
 msgid "Connection address (optional)"
 msgstr ""
 
-msgid "Pairing failed"
+msgid ""
+"Pairing failed. Check the pairing address and code under Wireless debugging "
+"on the device, and try again."
 msgstr ""
 
 msgid "Pairing succeeded"
@@ -139,7 +176,8 @@ msgstr ""
 msgid "adb is not installed"
 msgstr ""
 
-msgid "adb-tray is already running"
+#, python-brace-format
+msgid "{name} is already running"
 msgstr ""
 
 msgid "Copy the install command"
@@ -148,8 +186,5 @@ msgstr ""
 msgid "scrcpy is not installed"
 msgstr ""
 
-msgid "Copied to the clipboard: {command}"
-msgstr ""
-
-msgid "System tray icon for adb devices and scrcpy screen mirroring"
+msgid "Copied {command}. Paste it into Terminal to install."
 msgstr ""
