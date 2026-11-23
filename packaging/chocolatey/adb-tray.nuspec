@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chocolatey package for Appninjas ADB. The version and the checksum in tools/chocolateyinstall.ps1
+     are set from the release; see packaging/chocolatey/README.md. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>adb-tray</id>
+    <version>1.1.0</version>
+    <title>Appninjas ADB</title>
+    <authors>Dvisious AB</authors>
+    <owners>Dvisious AB</owners>
+    <projectUrl>https://appninjas.se/appar/adb</projectUrl>
+    <projectSourceUrl>https://github.com/Dvisious-AB/adb-tray</projectSourceUrl>
+    <docsUrl>https://appninjas.se/adb/help/en</docsUrl>
+    <bugTrackerUrl>https://github.com/Dvisious-AB/adb-tray/issues</bugTrackerUrl>
+    <licenseUrl>https://github.com/Dvisious-AB/adb-tray/blob/main/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <copyright>© 2026 Anders Elmén and Dvisious AB</copyright>
+    <tags>adb android scrcpy tray</tags>
+    <summary>Your Android devices in the system tray.</summary>
+    <description>Appninjas ADB puts an icon in the notification area that lists the Android devices adb sees. From its menu you mirror a screen with scrcpy, rotate it, take a screenshot, open adb shell and connect over Wi-Fi, without opening a terminal. The code is MIT; the Appninjas name and logo are trademarks of Dvisious AB.</description>
+    <releaseNotes>https://github.com/Dvisious-AB/adb-tray/releases</releaseNotes>
+    <dependencies>
+      <dependency id="scrcpy" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

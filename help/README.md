@@ -1,7 +1,8 @@
 # The manual
 
-The source of the Appninjas ADB manual, published at <https://appninjas.se/hjalp/adb> (Swedish) and
-<https://appninjas.se/en/hjalp/adb> (British English). **Help** in the app's menu opens it.
+The source of the Appninjas ADB manual, published at `https://appninjas.se/adb/help/<language>`: <https://appninjas.se/adb/help/sv> (Swedish) and
+<https://appninjas.se/adb/help/en> (British English). **Help** in the app's menu opens it with the
+system's two-letter language code; the site shows English for a language the manual does not have.
 
 The format is the Appninjas help module's (`docs/hjalp/content-and-writing.md` in appninjas.se):
 

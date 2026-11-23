@@ -87,3 +87,41 @@ jobs:
             echo "  sha256 \"$sha\""
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
+
+  windows:
+    name: windows
+    needs: release
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        shell: bash
+        run: |
+          echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+          ADB_TRAY_VERSION="${GITHUB_REF_NAME#v}" cargo build --locked --release --manifest-path rust/Cargo.toml
+
+      - name: Package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory package | Out-Null
+          Copy-Item rust/target/release/adb-tray.exe, LICENSE, NOTICE -Destination package
+          $zip = "adb-tray-$env:VERSION-windows-x64.zip"
+          Compress-Archive -Path package/* -DestinationPath $zip
+          "ZIP=$zip" | Out-File -Append $env:GITHUB_ENV
+
+      - name: Attach to the release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "$GITHUB_REF_NAME" "$ZIP" --clobber
+          sha="$(sha256sum "$ZIP" | cut -d' ' -f1)"
+          {
+            echo "### winget and Chocolatey"
+            echo "Windows zip: \`$ZIP\`"
+            echo '```text'
+            echo "InstallerSha256 / Checksum64: $sha"
+            echo '```'
+            echo "See packaging/winget/README.md and packaging/chocolatey/README.md."
+          } >> "$GITHUB_STEP_SUMMARY"

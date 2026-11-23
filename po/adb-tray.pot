@@ -1,10 +1,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
-#. Translators: the address of the help page in your language, or leave the English page.
-msgid "https://appninjas.se/en/hjalp/adb"
-msgstr ""
-
 #, python-brace-format
 msgid "Connected to {host}"
 msgstr ""

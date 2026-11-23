@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.10.0.schema.json
+PackageIdentifier: Dvisious.AppninjasADB
+PackageVersion: 1.1.0
+PackageLocale: en-GB
+Publisher: Dvisious AB
+PublisherUrl: https://appninjas.se
+PackageName: Appninjas ADB
+PackageUrl: https://appninjas.se/appar/adb
+License: MIT
+LicenseUrl: https://github.com/Dvisious-AB/adb-tray/blob/main/LICENSE
+Copyright: © 2026 Anders Elmén and Dvisious AB
+ShortDescription: "Your Android devices in the system tray: mirror the screen, take screenshots and connect over Wi-Fi."
+Description: |-
+  Appninjas ADB puts an icon in the notification area that lists the Android devices adb sees. From its
+  menu you mirror a screen with scrcpy, rotate it, take a screenshot, open adb shell and connect over
+  Wi-Fi, without opening a terminal.
+Moniker: adb-tray
+Tags:
+  - adb
+  - android
+  - scrcpy
+  - tray
+ReleaseNotesUrl: https://github.com/Dvisious-AB/adb-tray/releases/tag/v1.1.0
+Documentations:
+  - DocumentLabel: Manual
+    DocumentUrl: https://appninjas.se/adb/help/en
+ManifestType: defaultLocale
+ManifestVersion: 1.10.0
