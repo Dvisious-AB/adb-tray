@@ -1,0 +1,63 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Architectures: amd64 arm64 armhf i386
+Codename: stable
+Components: main
+Date: Mon, 23 Nov 2026 12:11:14 +0000
+Description: Appninjas packages
+Label: Appninjas
+Origin: Appninjas
+Suite: stable
+MD5Sum:
+ 37ea3073123b3c88defc812cb5b413e3              931 main/binary-amd64/Packages
+ caf7ac1f5443374d2db112da71183a38              646 main/binary-amd64/Packages.gz
+ 37ea3073123b3c88defc812cb5b413e3              931 main/binary-arm64/Packages
+ caf7ac1f5443374d2db112da71183a38              646 main/binary-arm64/Packages.gz
+ 37ea3073123b3c88defc812cb5b413e3              931 main/binary-armhf/Packages
+ caf7ac1f5443374d2db112da71183a38              646 main/binary-armhf/Packages.gz
+ 37ea3073123b3c88defc812cb5b413e3              931 main/binary-i386/Packages
+ caf7ac1f5443374d2db112da71183a38              646 main/binary-i386/Packages.gz
+SHA1:
+ b158fe8eec6ff572f137d4f9a2e8f440fca76f9a              931 main/binary-amd64/Packages
+ 17835e1a994c9a36ad9eddf4f8f25cf41e94706c              646 main/binary-amd64/Packages.gz
+ b158fe8eec6ff572f137d4f9a2e8f440fca76f9a              931 main/binary-arm64/Packages
+ 17835e1a994c9a36ad9eddf4f8f25cf41e94706c              646 main/binary-arm64/Packages.gz
+ b158fe8eec6ff572f137d4f9a2e8f440fca76f9a              931 main/binary-armhf/Packages
+ 17835e1a994c9a36ad9eddf4f8f25cf41e94706c              646 main/binary-armhf/Packages.gz
+ b158fe8eec6ff572f137d4f9a2e8f440fca76f9a              931 main/binary-i386/Packages
+ 17835e1a994c9a36ad9eddf4f8f25cf41e94706c              646 main/binary-i386/Packages.gz
+SHA256:
+ 820f3a0dc79bfcf80eadbbd24d140fc0fcfd705e8641d6bd9b01fe6004340bbc              931 main/binary-amd64/Packages
+ 06beb422b9f1ce01ad4ac38eacc5a91c8480b195b59a280a26a49027dc5f893b              646 main/binary-amd64/Packages.gz
+ 820f3a0dc79bfcf80eadbbd24d140fc0fcfd705e8641d6bd9b01fe6004340bbc              931 main/binary-arm64/Packages
+ 06beb422b9f1ce01ad4ac38eacc5a91c8480b195b59a280a26a49027dc5f893b              646 main/binary-arm64/Packages.gz
+ 820f3a0dc79bfcf80eadbbd24d140fc0fcfd705e8641d6bd9b01fe6004340bbc              931 main/binary-armhf/Packages
+ 06beb422b9f1ce01ad4ac38eacc5a91c8480b195b59a280a26a49027dc5f893b              646 main/binary-armhf/Packages.gz
+ 820f3a0dc79bfcf80eadbbd24d140fc0fcfd705e8641d6bd9b01fe6004340bbc              931 main/binary-i386/Packages
+ 06beb422b9f1ce01ad4ac38eacc5a91c8480b195b59a280a26a49027dc5f893b              646 main/binary-i386/Packages.gz
+SHA512:
+ 4ae4cf6c4f371b38c206982b076b16e8ac4f4ed56423fbc5b4551566af1d1540be46a4187aba40e32e4c5c66fdd117d7b7810b59fb2e54d218e10ac4e455d7d2              931 main/binary-amd64/Packages
+ fe0c4682a326a87cb8e3296805cda761f84d08681d42b973e7368cdb722e91229387e6fa7e3df4e30b1032ad7922f47b7c3e8d86ed12af893678f886c7a83fb9              646 main/binary-amd64/Packages.gz
+ 4ae4cf6c4f371b38c206982b076b16e8ac4f4ed56423fbc5b4551566af1d1540be46a4187aba40e32e4c5c66fdd117d7b7810b59fb2e54d218e10ac4e455d7d2              931 main/binary-arm64/Packages
+ fe0c4682a326a87cb8e3296805cda761f84d08681d42b973e7368cdb722e91229387e6fa7e3df4e30b1032ad7922f47b7c3e8d86ed12af893678f886c7a83fb9              646 main/binary-arm64/Packages.gz
+ 4ae4cf6c4f371b38c206982b076b16e8ac4f4ed56423fbc5b4551566af1d1540be46a4187aba40e32e4c5c66fdd117d7b7810b59fb2e54d218e10ac4e455d7d2              931 main/binary-armhf/Packages
+ fe0c4682a326a87cb8e3296805cda761f84d08681d42b973e7368cdb722e91229387e6fa7e3df4e30b1032ad7922f47b7c3e8d86ed12af893678f886c7a83fb9              646 main/binary-armhf/Packages.gz
+ 4ae4cf6c4f371b38c206982b076b16e8ac4f4ed56423fbc5b4551566af1d1540be46a4187aba40e32e4c5c66fdd117d7b7810b59fb2e54d218e10ac4e455d7d2              931 main/binary-i386/Packages
+ fe0c4682a326a87cb8e3296805cda761f84d08681d42b973e7368cdb722e91229387e6fa7e3df4e30b1032ad7922f47b7c3e8d86ed12af893678f886c7a83fb9              646 main/binary-i386/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEec/3w8pKGHFcGkN4DvGtMfTdZEMFAmsELWIACgkQDvGtMfTd
+ZEP/gQ/+MrA3T8pI7kRTrCnA0jS/d8R1Y0elyNfQCaWV66bh3iFwuryRxLZ+8fmu
+TCOWeaCTQKnuR93MiLftGHvz0OayiQ5/Hc5+adoCYPEpU7y8F2TjgP3QjCDQrc9n
+XjqaXa/8ZKzo9gV4SsKApXQCrwRPK6KNyDlxRBmRwH7qXtwN1kcvzySvxYcLL3T1
+MFcKL3ECdijlg7dsXPt6lXEfRzXPU5HpuvgYXGUlpQAvY0wdh2N7uKpFKd9aC5Nj
+zCAUozUmIsmWsUET65gmOlAN8bCw7COBAPmZf1fb9jTtS/JFnJLY3cIYP8f+9msf
+wqfYXYS1S04qVZgE6mtEU7pxNmNYrwfp3OXAyumqO1IJWLhJjuq2wXuhdP2XgMeZ
+duO3SVavmbntrYjg60nc2ZCZRiZXtimhgnI7a92hpzj5T5mmSlyx73T52zeX1vuU
+QmccSn6zAmVPcWY4Tow6W0eE374WJCwjZC6jfmjYo00ZFz1eUMb7ZUN+IFpy7vOI
+aGOK8znV9Avc8FYtzqlzbT5gAcyS+K/sNVZlC1KvlWE0AAqRvj20hzWb67HbmLeB
++I0OhIFIydpf8xtePNCAB1f3JtPUDol3DPHdw9Pi8+/MzGjjsLKXKHRqqeWQqvEo
+Kr5IrlodfmLdYsdHli+3cXKUaMMr6Pk7PLa6/rvENW+AjSzXmVI=
+=MOz1
+-----END PGP SIGNATURE-----

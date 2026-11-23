@@ -1,0 +1,20 @@
+Package: adb-tray
+Architecture: all
+Version: 1.0.0
+Priority: optional
+Section: utils
+Maintainer: Anders Elmén <anders@need2code.se>
+Installed-Size: 132
+Depends: python3, python3-gi, gir1.2-gtk-3.0, gir1.2-xapp-1.0, libnotify-bin, adb, scrcpy
+Filename: pool/main/a/adb-tray/adb-tray_1.0.0_all.deb
+Size: 10136
+MD5sum: 757d2cee88db80e53c5b35e2e63914a8
+SHA1: 4243b8fd7f4a6c45c86225937f48e4089a55554f
+SHA256: b914693eaeee8877918604ea6b0f9b0f879838fdcbdb003a48cf1d8d125edccc
+SHA512: 92822d85103cd970927d19ed3592a39cacdfc228187c78eed8ebbec73f89d31eff259fe0bc93d18bfb1e3157393bc85db2ea6f194ed7485e5adeba2cf2f72757
+Homepage: https://appninjas.se/appar/adb
+Description: Appninjas ADB: Android devices in the system tray
+ A tray icon that lists the devices adb sees. From its menu you mirror a
+ screen with scrcpy, rotate it, take a screenshot, open adb shell and
+ connect over Wi-Fi, without opening a terminal. Built for Cinnamon (XApp).
+
