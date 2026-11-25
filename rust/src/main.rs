@@ -5,6 +5,7 @@
 #![cfg_attr(windows, windows_subsystem = "windows")]
 
 mod actions;
+mod login;
 mod platform;
 
 use std::collections::HashMap;
@@ -22,7 +23,8 @@ use adb_tray::{icons, product};
 use tao::event::{Event, StartCause};
 use tao::event_loop::{ControlFlow, EventLoopBuilder, EventLoopProxy};
 use tray_icon::menu::{
-    IconMenuItem, IsMenuItem, Menu, MenuEvent, MenuId, MenuItem, PredefinedMenuItem, Submenu,
+    CheckMenuItem, IconMenuItem, IsMenuItem, Menu, MenuEvent, MenuId, MenuItem, PredefinedMenuItem,
+    Submenu,
 };
 use tray_icon::{Icon, TrayIcon, TrayIconBuilder};
 
@@ -70,6 +72,7 @@ pub enum Action {
     Refresh,
     RestartServer,
     CopyInstall(&'static str),
+    StartAtLogin,
     Help,
     About,
     Quit,
@@ -124,6 +127,8 @@ fn main() {
         );
         return;
     }
+
+    login::refresh();
 
     let mut event_loop = EventLoopBuilder::<UserEvent>::with_user_event().build();
     platform::prepare_event_loop(&mut event_loop);
@@ -220,6 +225,9 @@ fn main() {
                     *control_flow = ControlFlow::Exit;
                     return;
                 }
+                if matches!(action, Action::StartAtLogin) {
+                    state.signature.clear();
+                }
                 actions::run(action, &shared, &state.hosts);
             }
             _ => {}
@@ -255,6 +263,7 @@ struct MenuState {
     adb: Option<PathBuf>,
     scrcpy: Option<PathBuf>,
     hosts: Vec<String>,
+    start_at_login: bool,
     actions: HashMap<MenuId, Action>,
     signature: String,
     mirroring_shown: Option<bool>,
@@ -301,15 +310,18 @@ impl MenuState {
         }
 
         self.hosts = shared.hosts.load();
+        // Read again at every poll: it can also be turned off in Task Manager or Settings.
+        self.start_at_login = login::enabled();
         let signature = format!(
-            "{:?}|{mirrors:?}|{:?}|{:?}|{:?}",
+            "{:?}|{mirrors:?}|{:?}|{:?}|{:?}|{}",
             self.devices
                 .iter()
                 .map(|d| (&d.serial, &d.state, &d.model))
                 .collect::<Vec<_>>(),
             self.hosts,
             self.adb,
-            self.scrcpy
+            self.scrcpy,
+            self.start_at_login
         );
         if signature != self.signature {
             self.signature = signature;
@@ -411,6 +423,19 @@ impl MenuState {
             has_adb,
         ));
         let _ = menu.append(&separator());
+        if login::SUPPORTED {
+            self.next_id += 1;
+            let id = MenuId::new(self.next_id.to_string());
+            self.actions.insert(id.clone(), Action::StartAtLogin);
+            let item = CheckMenuItem::with_id(
+                id,
+                escape(tr("Start at login")),
+                true,
+                self.start_at_login,
+                None,
+            );
+            let _ = menu.append(&item);
+        }
         let _ = menu.append(&self.item(tr("Help"), Some("question"), Some(Action::Help), true));
         let about = format(tr("About {name}"), &[("name", &product::NAME)]);
         let _ = menu.append(&self.item(&about, Some("info"), Some(Action::About), true));

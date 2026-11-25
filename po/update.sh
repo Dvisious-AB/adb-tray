@@ -13,6 +13,13 @@ extract() {
     # trn("...", "...", n) are C-shaped enough for its C parser.
     xgettext -L C --from-code=UTF-8 --keyword= --keyword=tr --keyword=trn:1,2 \
         --add-comments=Translators: --omit-header -o - macos/Sources/AdbTray/*.swift
+    # The Rust version reuses it too, through the same C parser once lifetimes ('static) are taken
+    # out. gettext.rs is the catalogue reader itself, with test catalogues in raw strings.
+    for source in rust/src/*.rs; do
+        [[ "$source" == rust/src/gettext.rs ]] || sed -E "s/'[a-z_]+([^a-z_'])/\1/g" "$source"
+    done > "$rust"
+    xgettext -L C --from-code=UTF-8 --keyword= --keyword=tr --keyword=trn:1,2 \
+        --add-comments=Translators: --omit-header -o - "$rust"
     # Name is the product name, which is not translated; only Comment is.
     xgettext -L Desktop --keyword= --keyword=Comment --omit-header -o - adb-tray.desktop.in
 }
@@ -20,7 +27,8 @@ extract() {
 msgids() { msgcat --no-location --sort-output "$@" 2>/dev/null | grep -E '^msgid' || true; }
 
 pot="$(mktemp)"
-trap 'rm -f "$pot"' EXIT
+rust="$(mktemp)"
+trap 'rm -f "$pot" "$rust"' EXIT
 {
     printf 'msgid ""\nmsgstr ""\n"Content-Type: text/plain; charset=UTF-8\\n"\n\n'
     extract

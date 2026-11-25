@@ -1,7 +1,8 @@
 # Chocolatey
 
 The `adb-tray` package for the [Chocolatey community repository](https://community.chocolatey.org).
-It unpacks the release zip, and Chocolatey puts a shim for `adb-tray.exe` on the PATH. It depends on
+It unpacks the release zip, and Chocolatey puts a shim for `adb-tray.exe` on the PATH.
+`tools/chocolateyuninstall.ps1` removes the Start at login entry from the registry on uninstall. It depends on
 the community `scrcpy` package, which contains adb.
 
 After a release:

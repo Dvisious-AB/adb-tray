@@ -19,6 +19,14 @@ pub fn run(action: Action, shared: &Arc<Shared>, hosts: &[String]) {
             let _ = opener::open_browser(help_url());
         }
         Action::About => about(),
+        Action::StartAtLogin => {
+            // The menu has already ticked or unticked the item itself; the poll below rebuilds the
+            // menu from the registry, so it shows what took effect even when writing failed.
+            if crate::login::set(!crate::login::enabled()).is_err() {
+                notify(tr("Could not change Start at login."));
+            }
+            shared.poll_now();
+        }
         Action::CopyInstall(command) => {
             if arboard::Clipboard::new()
                 .and_then(|mut c| c.set_text(command))

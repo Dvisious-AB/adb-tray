@@ -14,4 +14,8 @@ After a release:
 3. Open a pull request against microsoft/winget-pkgs. Microsoft's pipeline scans and installs the
    package, and a moderator merges it.
 
+A portable package has no uninstall step of its own, so `winget uninstall` leaves the Start at login
+entry (`Appninjas ADB` under `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`) behind when it is
+on. Windows skips an entry whose program is gone, and the README tells users to untick it first.
+
 The program is not code-signed, so SmartScreen may say "unknown publisher" the first time it runs.
