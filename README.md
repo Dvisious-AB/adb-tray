@@ -77,6 +77,11 @@ the notification area; drag it onto the taskbar to keep it visible. The program 
 `adb-tray.exe`, also attached to every [release](https://github.com/Dvisious-AB/adb-tray/releases).
 It is not code-signed, so SmartScreen may ask before the first start.
 
+To start it at every login, tick **Start at login** in its menu. Untick it there, or turn it off under
+*Startup apps* in Task Manager or Settings. It is stored for your user only, under
+`HKCU\Software\Microsoft\Windows\CurrentVersion\Run`. `choco uninstall` removes it; with winget,
+untick it before `winget uninstall`.
+
 The Windows version is written in Rust (`rust/`) and is meant to replace the Python and Swift versions
 on Linux and macOS as well.
 

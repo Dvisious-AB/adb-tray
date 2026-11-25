@@ -214,3 +214,9 @@ msgstr "scrcpy är inte installerat"
 
 msgid "Copied {command}. Paste it into Terminal to install."
 msgstr "{command} är kopierat. Klistra in det i Terminal för att installera."
+
+msgid "Could not change Start at login."
+msgstr "Kunde inte ändra Starta vid inloggning."
+
+msgid "Start at login"
+msgstr "Starta vid inloggning"
