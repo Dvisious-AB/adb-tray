@@ -1,5 +1,5 @@
 # Homebrew formula for Appninjas ADB. The published copy is Formula/adb-tray.rb in
-# https://github.com/Dvisious-AB/homebrew-tap; update url and sha256 there after each release.
+# https://github.com/Dvisious-AB/homebrew-tap; after each release, update url and sha256 in both copies.
 #
 # It builds the menu bar app from source on the user's Mac, so the app is ad-hoc signed locally and
 # needs no Developer ID or notarization.
@@ -7,7 +7,7 @@ class AdbTray < Formula
   desc "Menu bar app for adb devices and scrcpy screen mirroring"
   homepage "https://appninjas.se/en/appar/adb"
   url "https://github.com/Dvisious-AB/adb-tray/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "0000000000000000000000000000000000000000000000000000000000000000"
+  sha256 "36ac9a77d737aeed756343d094bd65558108d83706889a4854e26fa9b0833ecf"
   # The code is MIT. The Appninjas name and logo in the app icon are not; see NOTICE.
   license "MIT"
   head "https://github.com/Dvisious-AB/adb-tray.git", branch: "main"
